@@ -6,6 +6,29 @@ import { codeToHtml } from 'shiki'
 import questions from '../quiz.json';
 import Link from 'next/link';
 
+
+// Helper function to get the title and description based on the slug
+function getQuestionDataBySlug(slug) {
+    return questions.find((question) => question.slug === slug);
+}
+
+export async function generateMetadata({ params }) {
+    const { slug } = params;
+
+    const questionData = getQuestionDataBySlug(slug); // Fetch data based on slug
+
+    if (!questionData) {
+        return {
+            title: 'Question not found',
+            description: 'No description available for this question.',
+        };
+    }
+
+    return {
+        title: questionData.title,
+        description: questionData.description,
+    };
+}
 // Shiki-based syntax highlighting component
 const CodeBlock = async ({ children, className }) => {
     const out = await codeToHtml(children.trim(), {
