@@ -15,6 +15,8 @@ function getQuestionDataBySlug(slug) {
 export async function generateMetadata({ params }) {
     const { slug } = params;
 
+    const siteUrl = `https://devpro.in/quiz/${slug}`;
+
     const questionData = getQuestionDataBySlug(slug); // Fetch data based on slug
 
     if (!questionData) {
@@ -27,6 +29,29 @@ export async function generateMetadata({ params }) {
     return {
         title: questionData.title,
         description: questionData.description,
+
+        openGraph: {
+            title: questionData.title,
+            description: questionData.description || 'No description available.',
+            url: siteUrl,
+            type: 'article', // Type can be 'article', 'website', etc.
+            images: [
+                {
+                    url: '/seo-icon.svg', // Replace with actual image URL
+                    width: 1200,
+                    height: 630,
+                    alt: `${questionData.title}`,
+                },
+            ],
+        },
+
+        // Twitter Card Meta Tags
+        twitter: {
+            card: 'summary_large_image', // Use 'summary' for smaller card, 'summary_large_image' for large image
+            title: questionData.title,
+            description: questionData.description || 'Front End Developer Interview Preparation',
+            images: ['/seo-icon.svg'], // Replace with actual image URL
+        },
     };
 }
 // Shiki-based syntax highlighting component
