@@ -107,7 +107,7 @@ const SlugPage = async ({ params }) => {
     return (
         <div className="flex h-screen">
             {/* Left Navigation */}
-            <nav className="w-1/4 p-4 border-r overflow-y-scroll">
+            <nav className="w-1/4 p-4 border-r overflow-y-scroll hidden md:block">
                 <div className="space-y-2">
                     {questions.map((item) => (
                         <div key={item.slug}>
@@ -124,7 +124,7 @@ const SlugPage = async ({ params }) => {
 
             {/* Right Content */}
             <main className="flex-1 py-4 px-8 overflow-y-auto">
-                <div className="prose px-8">
+                <div className="prose md:px-8">
                     <h1>{frontmatter?.title || 'Default Title'}</h1>
                     {content}
                 </div>
