@@ -105,23 +105,26 @@ const SlugPage = async ({ params }) => {
     });
 
     return (
-        <div className="flex">
+        <div className="flex h-screen">
             {/* Left Navigation */}
-            <nav className="w-1/4 p-4 border-r">
-                <ul className="space-y-2">
+            <nav className="w-1/4 p-4 border-r overflow-y-scroll">
+                <div className="space-y-2">
                     {questions.map((item) => (
-                        <li key={item.slug}>
-                            <Link href={`/quiz/${item.slug}`} className="block p-2 rounded hover:bg-gray-200">
+                        <div key={item.slug}>
+                            <Link
+                                href={`/quiz/${item.slug}`}
+                                className="block p-2 rounded text-gray-700 hover:text-white hover:bg-indigo-400 transition-colors duration-200"
+                            >
                                 {item.title}
                             </Link>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </nav>
 
             {/* Right Content */}
-            <main className="flex-1 p-4 mx-auto w-full max-w-xl sm:max-w-3xl md:max-w-4xl 2xl:max-w-5xl px-4 md:px-6 lg:px-8 py-6 lg:py-8 xl:py-16">
-                <div className="prose">
+            <main className="flex-1 py-4 px-8 overflow-y-auto">
+                <div className="prose px-8">
                     <h1>{frontmatter?.title || 'Default Title'}</h1>
                     {content}
                 </div>

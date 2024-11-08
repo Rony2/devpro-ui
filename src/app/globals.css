@@ -28,6 +28,10 @@ body {
   }
 } */
 
+body {
+  font-family: var(--font-work-sans);
+}
+
 .prose {
   color: #3f3f46;
   max-width: none;
