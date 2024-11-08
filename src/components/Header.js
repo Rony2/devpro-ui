@@ -17,7 +17,7 @@ const Header = () => {
           <h1 className="text-xl font-bold">DevPro</h1>
         </Link>
         <Link href='/quiz'>
-          <p className="ml-4"> Practise Questions</p>
+          <p className="ml-4"> Practice Questions</p>
         </Link>
       </div>
       {/* Theme toggle widget can go here */}

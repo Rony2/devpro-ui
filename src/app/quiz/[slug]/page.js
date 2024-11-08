@@ -104,6 +104,14 @@ const SlugPage = async ({ params }) => {
         },
     });
 
+    // Calculate the current question index
+    const currentIndex = questions.findIndex((item) => item.slug === slug);
+
+    // Determine next and previous question slugs
+    const prevQuestion = currentIndex > 0 ? questions[currentIndex - 1] : null;
+    const nextQuestion = currentIndex < questions.length - 1 ? questions[currentIndex + 1] : null;
+
+
     return (
         <div className="flex h-screen">
             {/* Left Navigation */}
@@ -127,6 +135,53 @@ const SlugPage = async ({ params }) => {
                 <div className="prose md:px-8">
                     <h1>{frontmatter?.title || 'Default Title'}</h1>
                     {content}
+                </div>
+
+                {/* Responsive Navigation Widget */}
+                <div className={`w-auto 
+                        fixed bottom-0 left-0 bottom-12 left-auto right-4 z-50 
+                        bg-white dark:bg-neutral-900 border-t border rounded-lg 
+                        border-neutral-200 dark:border-neutral-800 shadow-lg`}>
+                    <div className="flex items-center justify-between max-w-7xl mx-auto px-4 py-2">
+                        {/* Previous Button */}
+                        <Link
+                            href={prevQuestion ? `/quiz/${prevQuestion.slug}` : "#"}
+                            className={`inline-flex items-center justify-center h-8 w-8 rounded-full ${prevQuestion
+                                ? 'text-neutral-600 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                                : 'text-neutral-400 cursor-not-allowed'
+                                }`}
+                            aria-disabled={!prevQuestion}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="w-5 h-5">
+                                <path d="M10.828 12L15.778 16.95L14.364 18.364L8 12L14.364 5.636L15.778 7.05L10.828 12Z"></path>
+                            </svg>
+                        </Link>
+                        {/* Active Question Indicator */}
+                        <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                            {currentIndex + 1} / {questions.length}
+                        </span>
+                        {/* Next Button */}
+                        <Link
+                            href={nextQuestion ? `/quiz/${nextQuestion.slug}` : "#"}
+                            className={`inline-flex items-center justify-center h-8 w-8 rounded-full ${nextQuestion
+                                ? 'text-neutral-600 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                                : 'text-neutral-400 cursor-not-allowed'
+                                }`}
+                            aria-disabled={!nextQuestion}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="w-5 h-5"
+                            >
+                                <path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z"></path>
+                            </svg>
+                        </Link>
+                    </div>
                 </div>
             </main>
         </div>
