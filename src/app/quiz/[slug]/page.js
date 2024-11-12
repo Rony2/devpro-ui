@@ -113,7 +113,7 @@ const SlugPage = async ({ params }) => {
 
 
     return (
-        <div className="flex h-screen">
+        <div className={`flex h-screen`} style={{ height: 'calc(100vh - 106px)' }}>
             {/* Left Navigation */}
             <nav className="w-1/4 p-4 border-r overflow-y-scroll hidden md:block">
                 <div className="space-y-2">
