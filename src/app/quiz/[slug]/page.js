@@ -113,15 +113,18 @@ const SlugPage = async ({ params }) => {
 
 
     return (
-        <div className="flex h-screen">
+        <div className={`flex h-screen`} style={{ height: 'calc(100vh - 106px)' }}>
             {/* Left Navigation */}
-            <nav className="w-1/4 p-4 border-r overflow-y-scroll hidden md:block">
+            <nav className="w-1/4 p-4 border-r overflow-y-auto hidden md:block sticky top-0">
                 <div className="space-y-2">
                     {questions.map((item) => (
-                        <div key={item.slug}>
+                        <div key={item.slug} id={item.index}>
                             <Link
-                                href={`/quiz/${item.slug}`}
-                                className="block p-2 rounded text-gray-700 hover:text-white hover:bg-indigo-400 transition-colors duration-200"
+
+                                href={`/quiz/${item.slug}#${item.index}`}
+                                className={`block p-2 rounded text-gray-700 hover:text-white hover:bg-indigo-300 transition-colors duration-200
+                                    ${slug === item.slug ? 'bg-indigo-400 text-white font-semibold' : 'hover:text-white hover:bg-indigo-300'} 
+                                transition-colors duration-200`}
                             >
                                 {item.title}
                             </Link>
@@ -145,7 +148,7 @@ const SlugPage = async ({ params }) => {
                     <div className="flex items-center justify-between max-w-7xl mx-auto px-4 py-2">
                         {/* Previous Button */}
                         <Link
-                            href={prevQuestion ? `/quiz/${prevQuestion.slug}` : "#"}
+                            href={prevQuestion ? `/quiz/${prevQuestion.slug}#${prevQuestion.index}` : "#"}
                             className={`inline-flex items-center justify-center h-8 w-8 rounded-full ${prevQuestion
                                 ? 'text-neutral-600 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
                                 : 'text-neutral-400 cursor-not-allowed'
@@ -165,7 +168,7 @@ const SlugPage = async ({ params }) => {
                         </span>
                         {/* Next Button */}
                         <Link
-                            href={nextQuestion ? `/quiz/${nextQuestion.slug}` : "#"}
+                            href={nextQuestion ? `/quiz/${nextQuestion.slug}#${nextQuestion.index}` : "#"}
                             className={`inline-flex items-center justify-center h-8 w-8 rounded-full ${nextQuestion
                                 ? 'text-neutral-600 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
                                 : 'text-neutral-400 cursor-not-allowed'
