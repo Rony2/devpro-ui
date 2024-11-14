@@ -24,7 +24,7 @@ const workSans = Work_Sans({
 
 export const metadata = {
   title: "JavaScript Job Interview Question & Preparation | Devpro",
-  description: "Prepare for your next job interview with Devpro's curated list of common JavaScript interview questions and expert coding tips. Discover essential interview preparation material, coding challenges, and advice to ace your frontend developer role.",
+  description: "Ace your frontend job interviews with Devpro! Explore a comprehensive collection of JavaScript interview questions, coding interview strategies, and essential tips. Prepare effectively with curated resources designed to cover common interview topics and boost your chances of landing your next frontend developer role.",
 };
 
 export default function RootLayout({ children }) {
