@@ -115,7 +115,7 @@ const SlugPage = async ({ params }) => {
     return (
         <div className={`flex h-screen`} style={{ height: 'calc(100vh - 106px)' }}>
             {/* Left Navigation */}
-            <nav className="w-1/4 p-4 border-r overflow-y-auto sticky top-0">
+            <nav className="w-1/4 p-4 border-r overflow-y-auto hidden md:block sticky top-0">
                 <div className="space-y-2">
                     {questions.map((item) => (
                         <div key={item.slug} id={item.index}>
