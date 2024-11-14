@@ -14,7 +14,8 @@
     "importance": "medium",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 1
   },
   {
     "slug": "describe-event-bubbling",
@@ -31,7 +32,8 @@
     "importance": "high",
     "ranking": 210,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 2
   },
   {
     "slug": "describe-event-capturing",
@@ -48,7 +50,8 @@
     "importance": "high",
     "ranking": 220,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 3
   },
   {
     "slug": "describe-the-difference-between-a-cookie-sessionstorage-and-localstorage",
@@ -65,7 +68,8 @@
     "importance": "high",
     "ranking": 70,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 4
   },
   {
     "slug": "describe-the-difference-between-script-async-and-script-defer",
@@ -82,7 +86,8 @@
     "importance": "high",
     "ranking": 80,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 5
   },
   {
     "slug": "difference-between-document-load-event-and-document-domcontentloaded-event",
@@ -99,7 +104,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 6
   },
   {
     "slug": "difference-between-function-person-var-person-person-and-var-person-new-person",
@@ -116,7 +122,8 @@
     "importance": "high",
     "ranking": 140,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 7
   },
   {
     "slug": "explain-ajax-in-as-much-detail-as-possible",
@@ -133,7 +140,8 @@
     "importance": "medium",
     "ranking": 270,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 8
   },
   {
     "slug": "explain-event-delegation",
@@ -150,7 +158,8 @@
     "importance": "high",
     "ranking": 50,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 9
   },
   {
     "slug": "explain-function-prototype-bind",
@@ -167,7 +176,8 @@
     "importance": "high",
     "ranking": 110,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 10
   },
   {
     "slug": "explain-hoisting",
@@ -184,7 +194,8 @@
     "importance": "high",
     "ranking": 10,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 11
   },
   {
     "slug": "explain-how-jsonp-works-and-how-its-not-really-ajax",
@@ -201,7 +212,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 12
   },
   {
     "slug": "explain-how-prototypal-inheritance-works",
@@ -218,7 +230,8 @@
     "importance": "high",
     "ranking": 130,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 13
   },
   {
     "slug": "explain-how-this-works-in-javascript",
@@ -235,7 +248,8 @@
     "importance": "high",
     "ranking": 60,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 14
   },
   {
     "slug": "explain-the-concept-of-a-callback-function-in-asynchronous-operations",
@@ -252,7 +266,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 15
   },
   {
     "slug": "explain-the-concept-of-a-microtask-queue",
@@ -269,7 +284,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 16
   },
   {
     "slug": "explain-the-concept-of-caching-and-how-it-can-be-used-to-improve-performance",
@@ -286,7 +302,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 17
   },
   {
     "slug": "explain-the-concept-of-code-coverage-and-how-it-can-be-used-to-assess-test-quality",
@@ -303,7 +320,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 18
   },
   {
     "slug": "explain-the-concept-of-content-security-policy-csp-and-how-it-enhances-security",
@@ -320,7 +338,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 19
   },
   {
     "slug": "explain-the-concept-of-cross-site-request-forgery-csrf-and-its-mitigation-techniques",
@@ -337,7 +356,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 20
   },
   {
     "slug": "explain-the-concept-of-debouncing-and-throttling",
@@ -354,7 +374,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 21
   },
   {
     "slug": "explain-the-concept-of-destructuring-assignment-for-objects-and-arrays",
@@ -371,7 +392,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 22
   },
   {
     "slug": "explain-the-concept-of-error-propagation-in-javascript",
@@ -388,7 +410,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Error Handling"
+    "section": "Error Handling",
+    "index": 23
   },
   {
     "slug": "explain-the-concept-of-hoisting-with-regards-to-functions",
@@ -405,7 +428,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 24
   },
   {
     "slug": "explain-the-concept-of-inheritance-in-es2015-classes",
@@ -422,7 +446,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Prototypes & Inheritance"
+    "section": "Prototypes & Inheritance",
+    "index": 25
   },
   {
     "slug": "explain-the-concept-of-input-validation-and-its-importance-in-security",
@@ -439,7 +464,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 26
   },
   {
     "slug": "explain-the-concept-of-lazy-loading-and-how-it-can-improve-performance",
@@ -456,7 +482,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 27
   },
   {
     "slug": "explain-the-concept-of-lexical-scoping",
@@ -473,7 +500,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Closures & Scope"
+    "section": "Closures & Scope",
+    "index": 28
   },
   {
     "slug": "explain-the-concept-of-partial-application",
@@ -490,7 +518,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Currying & Partial Application"
+    "section": "Currying & Partial Application",
+    "index": 29
   },
   {
     "slug": "explain-the-concept-of-scope-in-javascript",
@@ -507,7 +536,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 30
   },
   {
     "slug": "explain-the-concept-of-tagged-templates",
@@ -524,7 +554,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Data Types & Variables"
+    "section": "Data Types & Variables",
+    "index": 31
   },
   {
     "slug": "explain-the-concept-of-test-driven-development-tdd",
@@ -541,7 +572,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 32
   },
   {
     "slug": "explain-the-concept-of-the-prototype-pattern",
@@ -558,7 +590,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 33
   },
   {
     "slug": "explain-the-concept-of-the-singleton-pattern",
@@ -575,7 +608,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 34
   },
   {
     "slug": "explain-the-concept-of-the-spread-operator-and-its-uses",
@@ -592,7 +626,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 35
   },
   {
     "slug": "explain-the-concept-of-the-strategy-pattern",
@@ -609,7 +644,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 36
   },
   {
     "slug": "explain-the-concept-of-the-web-socket-api",
@@ -626,7 +662,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 37
   },
   {
     "slug": "explain-the-concept-of-this-binding-in-event-handlers",
@@ -643,7 +680,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "This Keyword"
+    "section": "This Keyword",
+    "index": 38
   },
   {
     "slug": "explain-the-concept-of-tree-shaking-in-module-bundling",
@@ -660,7 +698,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Modules"
+    "section": "Modules",
+    "index": 39
   },
   {
     "slug": "explain-the-difference-between-classical-inheritance-and-prototypal-inheritance",
@@ -677,7 +716,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Prototypes & Inheritance"
+    "section": "Prototypes & Inheritance",
+    "index": 40
   },
   {
     "slug": "explain-the-difference-between-documentqueryselector-and-documentgetelementbyid",
@@ -694,7 +734,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 41
   },
   {
     "slug": "explain-the-difference-between-dot-notation-and-bracket-notation-for-accessing-object-properties",
@@ -711,7 +752,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 42
   },
   {
     "slug": "explain-the-difference-between-global-scope-function-scope-and-block-scope",
@@ -728,7 +770,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Closures & Scope"
+    "section": "Closures & Scope",
+    "index": 43
   },
   {
     "slug": "explain-the-difference-between-mutable-and-immutable-objects",
@@ -745,7 +788,8 @@
     "importance": "medium",
     "ranking": 390,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 44
   },
   {
     "slug": "explain-the-difference-between-shallow-copy-and-deep-copy",
@@ -762,7 +806,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 45
   },
   {
     "slug": "explain-the-difference-between-synchronous-and-asynchronous-functions",
@@ -779,7 +824,8 @@
     "importance": "high",
     "ranking": 250,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 46
   },
   {
     "slug": "explain-the-difference-between-unit-testing-integration-testing-and-end-to-end-testing",
@@ -796,7 +842,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 47
   },
   {
     "slug": "explain-the-difference-in-hoisting-between-var-let-and-const",
@@ -813,7 +860,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Hoisting"
+    "section": "Hoisting",
+    "index": 48
   },
   {
     "slug": "explain-the-differences-between-commonjs-modules-and-es-modules",
@@ -830,7 +878,8 @@
     "importance": "medium",
     "ranking": 340,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 49
   },
   {
     "slug": "explain-the-differences-on-the-usage-of-foo-between-function-foo-and-var-foo-function",
@@ -847,7 +896,8 @@
     "importance": "high",
     "ranking": 150,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 50
   },
   {
     "slug": "explain-the-different-states-of-a-promise",
@@ -864,7 +914,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 51
   },
   {
     "slug": "explain-the-different-ways-the-this-keyword-can-be-bound",
@@ -881,7 +932,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "This Keyword"
+    "section": "This Keyword",
+    "index": 52
   },
   {
     "slug": "explain-the-event-phases-in-a-browser",
@@ -898,7 +950,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 53
   },
   {
     "slug": "explain-the-observer-pattern-and-its-use-cases",
@@ -915,7 +968,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 54
   },
   {
     "slug": "explain-the-same-origin-policy-with-regards-to-javascript",
@@ -932,7 +986,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 55
   },
   {
     "slug": "explain-what-a-single-page-app-is-and-how-to-make-one-seo-friendly",
@@ -949,7 +1004,8 @@
     "importance": "medium",
     "ranking": 999,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 56
   },
   {
     "slug": "explain-why-the-following-doesnt-work-as-an-iife-function-foo--what-needs-to-be-changed-to-properly-make-it-an-iife",
@@ -966,7 +1022,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 57
   },
   {
     "slug": "how-can-closures-be-used-to-create-private-variables",
@@ -983,7 +1040,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Closures & Scope"
+    "section": "Closures & Scope",
+    "index": 58
   },
   {
     "slug": "how-can-you-avoid-problems-related-to-hoisting",
@@ -1000,7 +1058,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Hoisting"
+    "section": "Hoisting",
+    "index": 59
   },
   {
     "slug": "how-can-you-create-custom-error-objects",
@@ -1017,7 +1076,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Error Handling"
+    "section": "Error Handling",
+    "index": 60
   },
   {
     "slug": "how-can-you-implement-secure-authentication-and-authorization-in-javascript-applications",
@@ -1034,7 +1094,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 61
   },
   {
     "slug": "how-can-you-optimize-dom-manipulation-for-better-performance",
@@ -1051,7 +1112,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 62
   },
   {
     "slug": "how-can-you-optimize-network-requests-for-better-performance",
@@ -1068,7 +1130,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 63
   },
   {
     "slug": "how-can-you-prevent-clickjacking-attacks",
@@ -1085,7 +1148,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 64
   },
   {
     "slug": "how-can-you-prevent-sql-injection-vulnerabilities-in-javascript-applications",
@@ -1102,7 +1166,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 65
   },
   {
     "slug": "how-can-you-share-code-between-files",
@@ -1119,7 +1184,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 66
   },
   {
     "slug": "how-can-you-test-asynchronous-code-in-javascript",
@@ -1136,7 +1202,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 67
   },
   {
     "slug": "how-do-currying-and-partial-application-differ-from-each-other",
@@ -1153,7 +1220,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Currying & Partial Application"
+    "section": "Currying & Partial Application",
+    "index": 68
   },
   {
     "slug": "how-do-iframe-on-a-page-communicate",
@@ -1170,7 +1238,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 69
   },
   {
     "slug": "how-do-sets-and-maps-handle-equality-checks-for-objects",
@@ -1187,7 +1256,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Sets & Maps"
+    "section": "Sets & Maps",
+    "index": 70
   },
   {
     "slug": "how-do-you-abort-a-web-request-using-abortcontrollers",
@@ -1204,7 +1274,8 @@
     "importance": "medium",
     "ranking": 300,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 71
   },
   {
     "slug": "how-do-you-access-the-index-of-an-element-in-an-array-during-iteration",
@@ -1221,7 +1292,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 72
   },
   {
     "slug": "how-do-you-add-remove-and-modify-html-elements-using-javascript",
@@ -1238,7 +1310,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 73
   },
   {
     "slug": "how-do-you-add-remove-and-update-elements-in-an-array",
@@ -1255,7 +1328,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 74
   },
   {
     "slug": "how-do-you-check-if-an-object-has-a-specific-property",
@@ -1272,7 +1346,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 75
   },
   {
     "slug": "how-do-you-check-the-data-type-of-a-variable",
@@ -1289,7 +1364,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Data Types & Variables"
+    "section": "Data Types & Variables",
+    "index": 76
   },
   {
     "slug": "how-do-you-convert-a-set-to-an-array-in-javascript",
@@ -1306,7 +1382,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Sets & Maps"
+    "section": "Sets & Maps",
+    "index": 77
   },
   {
     "slug": "how-do-you-convert-a-string-to-a-number-in-javascript",
@@ -1323,7 +1400,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Data Types & Variables"
+    "section": "Data Types & Variables",
+    "index": 78
   },
   {
     "slug": "how-do-you-create-a-constructor-function",
@@ -1340,7 +1418,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Prototypes & Inheritance"
+    "section": "Prototypes & Inheritance",
+    "index": 79
   },
   {
     "slug": "how-do-you-detect-if-javascript-is-disabled-on-a-page",
@@ -1357,7 +1436,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 80
   },
   {
     "slug": "how-do-you-get-the-query-string-values-of-the-current-page-in-javascript",
@@ -1374,7 +1454,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 81
   },
   {
     "slug": "how-do-you-handle-errors-in-asynchronous-operations",
@@ -1391,7 +1472,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 82
   },
   {
     "slug": "how-do-you-handle-errors-using-trycatch-blocks",
@@ -1408,7 +1490,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Error Handling"
+    "section": "Error Handling",
+    "index": 83
   },
   {
     "slug": "how-do-you-import-and-export-modules-in-javascript",
@@ -1425,7 +1508,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Modules"
+    "section": "Modules",
+    "index": 84
   },
   {
     "slug": "how-do-you-make-an-http-request-using-the-fetch-api",
@@ -1442,7 +1526,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 85
   },
   {
     "slug": "how-do-you-manipulate-css-styles-using-javascript",
@@ -1459,7 +1544,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 86
   },
   {
     "slug": "how-do-you-organize-your-code-module-pattern-classical-inheritance",
@@ -1476,7 +1562,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 87
   },
   {
     "slug": "how-do-you-prevent-the-default-behavior-of-an-event",
@@ -1493,7 +1580,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 88
   },
   {
     "slug": "how-do-you-redirect-to-a-new-page-in-javascript",
@@ -1510,7 +1598,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 89
   },
   {
     "slug": "how-do-you-reliably-determine-whether-an-object-is-empty",
@@ -1527,7 +1616,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 90
   },
   {
     "slug": "how-do-you-use-windowhistory-api",
@@ -1544,7 +1634,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 91
   },
   {
     "slug": "how-do-you-validate-form-elements-using-the-constraint-validation-api",
@@ -1561,7 +1652,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 92
   },
   {
     "slug": "how-do-you-write-unit-tests-for-javascript-code",
@@ -1578,7 +1670,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 93
   },
   {
     "slug": "how-does-hoisting-affect-function-declarations-and-expressions",
@@ -1595,7 +1688,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Hoisting"
+    "section": "Hoisting",
+    "index": 94
   },
   {
     "slug": "how-does-javascript-garbage-collection-work",
@@ -1612,7 +1706,8 @@
     "importance": "medium",
     "ranking": 500,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 95
   },
   {
     "slug": "how-is-promiseall-different-from-promiseallsettled",
@@ -1629,7 +1724,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 96
   },
   {
     "slug": "provide-some-examples-of-how-currying-and-partial-application-can-be-used",
@@ -1646,7 +1742,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Currying & Partial Application"
+    "section": "Currying & Partial Application",
+    "index": 97
   },
   {
     "slug": "what-advantage-is-there-for-using-the-arrow-syntax-for-a-method-in-a-constructor",
@@ -1663,7 +1760,8 @@
     "importance": "high",
     "ranking": 120,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 98
   },
   {
     "slug": "what-are-callback-functions-and-how-are-they-used",
@@ -1680,7 +1778,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 99
   },
   {
     "slug": "what-are-default-parameters-and-how-are-they-used",
@@ -1697,7 +1796,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 100
   },
   {
     "slug": "what-are-design-patterns-and-why-are-they-useful",
@@ -1714,7 +1814,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 101
   },
   {
     "slug": "what-are-event-listeners-and-how-are-they-used",
@@ -1731,7 +1832,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 102
   },
   {
     "slug": "what-are-iterators-and-generators-and-what-are-they-used-for",
@@ -1748,7 +1850,8 @@
     "importance": "medium",
     "ranking": 380,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 103
   },
   {
     "slug": "what-are-javascript-object-getters-and-setters-for",
@@ -1765,7 +1868,8 @@
     "importance": "medium",
     "ranking": 460,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 104
   },
   {
     "slug": "what-are-javascript-object-property-flags-and-descriptors",
@@ -1782,7 +1886,8 @@
     "importance": "medium",
     "ranking": 450,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 105
   },
   {
     "slug": "what-are-javascript-polyfills-for",
@@ -1799,7 +1904,8 @@
     "importance": "medium",
     "ranking": 310,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 106
   },
   {
     "slug": "what-are-mocks-and-stubs-and-how-are-they-used-in-testing",
@@ -1816,7 +1922,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 107
   },
   {
     "slug": "what-are-modules-and-why-are-they-useful",
@@ -1833,7 +1940,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Modules"
+    "section": "Modules",
+    "index": 108
   },
   {
     "slug": "what-are-progressive-web-applications-pwas",
@@ -1850,7 +1958,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 109
   },
   {
     "slug": "what-are-promises-and-how-do-they-work",
@@ -1867,7 +1976,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 110
   },
   {
     "slug": "what-are-proxies-in-javascript-used-for",
@@ -1884,7 +1994,8 @@
     "importance": "low",
     "ranking": 470,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 111
   },
   {
     "slug": "what-are-rest-parameters-and-how-are-they-used",
@@ -1901,7 +2012,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 112
   },
   {
     "slug": "what-are-server-sent-events",
@@ -1918,7 +2030,8 @@
     "importance": "medium",
     "ranking": 440,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 113
   },
   {
     "slug": "what-are-sets-and-maps-and-how-are-they-used",
@@ -1935,7 +2048,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Sets & Maps"
+    "section": "Sets & Maps",
+    "index": 114
   },
   {
     "slug": "what-are-some-best-practices-for-handling-sensitive-data-in-javascript",
@@ -1952,7 +2066,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 115
   },
   {
     "slug": "what-are-some-best-practices-for-writing-maintainable-and-effective-tests",
@@ -1969,7 +2084,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 116
   },
   {
     "slug": "what-are-some-common-performance-bottlenecks-in-javascript-applications",
@@ -1986,7 +2102,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 117
   },
   {
     "slug": "what-are-some-common-security-headers-and-their-purpose",
@@ -2003,7 +2120,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 118
   },
   {
     "slug": "what-are-some-of-the-advantages-disadvantages-of-writing-javascript-code-in-a-language-that-compiles-to-javascript",
@@ -2020,7 +2138,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 119
   },
   {
     "slug": "what-are-some-popular-javascript-testing-frameworks",
@@ -2037,7 +2156,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 120
   },
   {
     "slug": "what-are-some-techniques-for-reducing-reflows-and-repaints",
@@ -2054,7 +2174,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 121
   },
   {
     "slug": "what-are-some-tools-and-techniques-for-identifying-security-vulnerabilities-in-javascript-code",
@@ -2071,7 +2192,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 122
   },
   {
     "slug": "what-are-some-tools-that-can-be-used-for-javascript-testing",
@@ -2088,7 +2210,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 123
   },
   {
     "slug": "what-are-some-tools-that-can-be-used-to-measure-and-analyze-javascript-performance",
@@ -2105,7 +2228,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 124
   },
   {
     "slug": "what-are-symbols-used-for",
@@ -2122,7 +2246,8 @@
     "importance": "medium",
     "ranking": 430,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 125
   },
   {
     "slug": "what-are-template-literals-and-how-are-they-used",
@@ -2139,7 +2264,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Data Types & Variables"
+    "section": "Data Types & Variables",
+    "index": 126
   },
   {
     "slug": "what-are-the-advantages-and-disadvantages-of-using-ajax",
@@ -2156,7 +2282,8 @@
     "importance": "medium",
     "ranking": 280,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 127
   },
   {
     "slug": "what-are-the-advantages-of-using-the-spread-operator-with-arrays-and-objects",
@@ -2173,7 +2300,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 128
   },
   {
     "slug": "what-are-the-benefits-of-using-a-module-bundler",
@@ -2190,7 +2318,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Modules"
+    "section": "Modules",
+    "index": 129
   },
   {
     "slug": "what-are-the-benefits-of-using-currying-and-partial-application",
@@ -2207,7 +2336,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Currying & Partial Application"
+    "section": "Currying & Partial Application",
+    "index": 130
   },
   {
     "slug": "what-are-the-benefits-of-using-spread-syntax-and-how-is-it-different-from-rest-syntax",
@@ -2224,7 +2354,8 @@
     "importance": "low",
     "ranking": 370,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 131
   },
   {
     "slug": "what-are-the-common-pitfalls-of-using-the-this-keyword",
@@ -2241,7 +2372,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "This Keyword"
+    "section": "This Keyword",
+    "index": 132
   },
   {
     "slug": "what-are-the-differences-between-es6-class-and-es5-function-constructors",
@@ -2258,7 +2390,8 @@
     "importance": "high",
     "ranking": 200,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 133
   },
   {
     "slug": "what-are-the-differences-between-map-set-and-weakmap-weakset",
@@ -2275,7 +2408,8 @@
     "importance": "medium",
     "ranking": 410,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 134
   },
   {
     "slug": "what-are-the-differences-between-variables-created-using-let-var-or-const",
@@ -2292,7 +2426,8 @@
     "importance": "high",
     "ranking": 20,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 135
   },
   {
     "slug": "what-are-the-differences-between-xmlhttprequest-and-fetch",
@@ -2309,7 +2444,8 @@
     "importance": "medium",
     "ranking": 290,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 136
   },
   {
     "slug": "what-are-the-different-methods-for-iterating-over-an-array",
@@ -2326,7 +2462,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 137
   },
   {
     "slug": "what-are-the-different-types-of-errors-in-javascript",
@@ -2343,7 +2480,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Error Handling"
+    "section": "Error Handling",
+    "index": 138
   },
   {
     "slug": "what-are-the-different-types-of-testing-in-software-development",
@@ -2360,7 +2498,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Testing"
+    "section": "Testing",
+    "index": 139
   },
   {
     "slug": "what-are-the-different-ways-to-copy-an-object-or-an-array",
@@ -2377,7 +2516,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 140
   },
   {
     "slug": "what-are-the-different-ways-to-make-an-api-call-in-javascript",
@@ -2394,7 +2534,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 141
   },
   {
     "slug": "what-are-the-metadata-fields-of-a-module",
@@ -2411,7 +2552,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Modules"
+    "section": "Modules",
+    "index": 142
   },
   {
     "slug": "what-are-the-potential-issues-caused-by-hoisting",
@@ -2428,7 +2570,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Hoisting"
+    "section": "Hoisting",
+    "index": 143
   },
   {
     "slug": "what-are-the-potential-pitfalls-of-using-closures",
@@ -2445,7 +2588,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Closures & Scope"
+    "section": "Closures & Scope",
+    "index": 144
   },
   {
     "slug": "what-are-the-pros-and-cons-of-using-promises-instead-of-callbacks",
@@ -2462,7 +2606,8 @@
     "importance": "high",
     "ranking": 260,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 145
   },
   {
     "slug": "what-are-the-various-data-types-in-javascript",
@@ -2479,7 +2624,8 @@
     "importance": "low",
     "ranking": 350,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 146
   },
   {
     "slug": "what-are-the-various-ways-to-create-objects-in-javascript",
@@ -2496,7 +2642,8 @@
     "importance": "high",
     "ranking": 170,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 147
   },
   {
     "slug": "what-are-web-workers-and-how-can-they-be-used-to-improve-performance",
@@ -2513,7 +2660,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Performance Optimization"
+    "section": "Performance Optimization",
+    "index": 148
   },
   {
     "slug": "what-are-workers-in-javascript-used-for",
@@ -2530,7 +2678,8 @@
     "importance": "medium",
     "ranking": 490,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 149
   },
   {
     "slug": "what-do-you-think-of-amd-vs-commonjs",
@@ -2547,7 +2696,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 150
   },
   {
     "slug": "what-is-a-closure-and-how-why-would-you-use-one",
@@ -2564,7 +2714,8 @@
     "importance": "high",
     "ranking": 180,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 151
   },
   {
     "slug": "what-is-asyncawait-and-how-does-it-simplify-asynchronous-code",
@@ -2581,7 +2732,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 152
   },
   {
     "slug": "what-is-cross-site-scripting-xss-and-how-can-you-prevent-it",
@@ -2598,7 +2750,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Security"
+    "section": "Security",
+    "index": 153
   },
   {
     "slug": "what-is-currying-and-how-does-it-work",
@@ -2615,7 +2768,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Currying & Partial Application"
+    "section": "Currying & Partial Application",
+    "index": 154
   },
   {
     "slug": "what-is-event-loop-what-is-the-difference-between-call-stack-and-task-queue",
@@ -2632,7 +2786,8 @@
     "importance": "high",
     "ranking": 40,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 155
   },
   {
     "slug": "what-is-objectfreeze-for",
@@ -2649,7 +2804,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 156
   },
   {
     "slug": "what-is-objectpreventextensions-for",
@@ -2666,7 +2822,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 157
   },
   {
     "slug": "what-is-objectseal-for",
@@ -2683,7 +2840,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Objects & Arrays"
+    "section": "Objects & Arrays",
+    "index": 158
   },
   {
     "slug": "what-is-recursion-and-how-is-it-used-in-javascript",
@@ -2700,7 +2858,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 159
   },
   {
     "slug": "what-is-the-command-pattern-and-how-is-it-used",
@@ -2717,7 +2876,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 160
   },
   {
     "slug": "what-is-the-decorator-pattern-and-how-is-it-used",
@@ -2734,7 +2894,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 161
   },
   {
     "slug": "what-is-the-definition-of-a-higher-order-function",
@@ -2751,7 +2912,8 @@
     "importance": "high",
     "ranking": 190,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 162
   },
   {
     "slug": "what-is-the-difference-between-a-map-object-and-a-plain-object-in-javascript",
@@ -2768,7 +2930,8 @@
     "importance": "medium",
     "ranking": 400,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 163
   },
   {
     "slug": "what-is-the-difference-between-a-parameter-and-an-argument",
@@ -2785,7 +2948,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Functions"
+    "section": "Functions",
+    "index": 164
   },
   {
     "slug": "what-is-the-difference-between-double-equal-and-triple-equal",
@@ -2802,7 +2966,8 @@
     "importance": "high",
     "ranking": 30,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 165
   },
   {
     "slug": "what-is-the-difference-between-eventpreventdefault-and-eventstoppropagation",
@@ -2819,7 +2984,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 166
   },
   {
     "slug": "what-is-the-difference-between-innerhtml-and-textcontent",
@@ -2836,7 +3002,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 167
   },
   {
     "slug": "what-is-the-difference-between-mouseenter-and-mouseover-event",
@@ -2853,7 +3020,8 @@
     "importance": "low",
     "ranking": 230,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 168
   },
   {
     "slug": "what-is-the-difference-between-settimeout-setimmediate-and-processnexttick",
@@ -2870,7 +3038,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 169
   },
   {
     "slug": "what-is-the-difference-between-the-window-object-and-the-document-object",
@@ -2887,7 +3056,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 170
   },
   {
     "slug": "what-is-the-dom-and-how-is-it-structured",
@@ -2904,7 +3074,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "DOM Manipulation & Events"
+    "section": "DOM Manipulation & Events",
+    "index": 171
   },
   {
     "slug": "what-is-the-factory-pattern-and-how-is-it-used",
@@ -2921,7 +3092,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 172
   },
   {
     "slug": "what-is-the-intl-namespace-object-for",
@@ -2938,7 +3110,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Web APIs & Browser APIs"
+    "section": "Web APIs & Browser APIs",
+    "index": 173
   },
   {
     "slug": "what-is-the-module-pattern-and-how-does-it-help-with-encapsulation",
@@ -2955,7 +3128,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Design Patterns"
+    "section": "Design Patterns",
+    "index": 174
   },
   {
     "slug": "what-is-the-prototype-chain-and-how-does-it-work",
@@ -2972,7 +3146,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Prototypes & Inheritance"
+    "section": "Prototypes & Inheritance",
+    "index": 175
   },
   {
     "slug": "what-is-the-purpose-of-the-break-and-continue-statements",
@@ -2989,7 +3164,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 176
   },
   {
     "slug": "what-is-the-purpose-of-the-finally-block",
@@ -3006,7 +3182,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Error Handling"
+    "section": "Error Handling",
+    "index": 177
   },
   {
     "slug": "what-is-the-purpose-of-the-new-keyword",
@@ -3023,7 +3200,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Prototypes & Inheritance"
+    "section": "Prototypes & Inheritance",
+    "index": 178
   },
   {
     "slug": "what-is-the-purpose-of-the-switch-statement",
@@ -3040,7 +3218,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 179
   },
   {
     "slug": "what-is-the-spread-operator-and-how-is-it-used",
@@ -3057,7 +3236,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Data Types & Variables"
+    "section": "Data Types & Variables",
+    "index": 180
   },
   {
     "slug": "what-is-the-ternary-operator-and-how-is-it-used",
@@ -3074,7 +3254,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Operators & Control Flow"
+    "section": "Operators & Control Flow",
+    "index": 181
   },
   {
     "slug": "what-is-the-use-of-promiseall",
@@ -3091,7 +3272,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "Asynchronous JavaScript"
+    "section": "Asynchronous JavaScript",
+    "index": 182
   },
   {
     "slug": "what-is-use-strict-what-are-the-advantages-and-disadvantages-to-using-it",
@@ -3108,7 +3290,8 @@
     "importance": "medium",
     "ranking": 240,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 183
   },
   {
     "slug": "what-language-constructs-do-you-use-for-iterating-over-object-properties-and-array-items",
@@ -3125,7 +3308,8 @@
     "importance": "low",
     "ranking": 360,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 184
   },
   {
     "slug": "what-tools-and-techniques-do-you-use-for-debugging-javascript-code",
@@ -3142,7 +3326,8 @@
     "importance": "low",
     "ranking": 480,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 185
   },
   {
     "slug": "whats-a-typical-use-case-for-anonymous-functions",
@@ -3159,7 +3344,8 @@
     "importance": "high",
     "ranking": 160,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 186
   },
   {
     "slug": "whats-the-difference-between-a-variable-that-is-null-undefined-or-undeclared-how-would-you-go-about-checking-for-any-of-these-states",
@@ -3176,7 +3362,8 @@
     "importance": "high",
     "ranking": 90,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 187
   },
   {
     "slug": "whats-the-difference-between-an-attribute-and-a-property",
@@ -3193,7 +3380,8 @@
     "importance": "medium",
     "ranking": 999,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 188
   },
   {
     "slug": "whats-the-difference-between-call-and-apply",
@@ -3210,7 +3398,8 @@
     "importance": "high",
     "ranking": 100,
     "difficulty": "easy",
-    "section": "General"
+    "section": "General",
+    "index": 189
   },
   {
     "slug": "when-would-you-use-document-write",
@@ -3227,7 +3416,8 @@
     "importance": "low",
     "ranking": 999,
     "difficulty": "hard",
-    "section": "General"
+    "section": "General",
+    "index": 190
   },
   {
     "slug": "why-is-extending-built-in-javascript-objects-not-a-good-idea",
@@ -3244,7 +3434,8 @@
     "importance": "medium",
     "ranking": 320,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 191
   },
   {
     "slug": "why-is-it-in-general-a-good-idea-to-leave-the-global-scope-of-a-website-as-is-and-never-touch-it",
@@ -3261,7 +3452,8 @@
     "importance": "medium",
     "ranking": 330,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 192
   },
   {
     "slug": "why-you-might-want-to-create-static-class-members",
@@ -3278,6 +3470,7 @@
     "importance": "medium",
     "ranking": 420,
     "difficulty": "medium",
-    "section": "General"
+    "section": "General",
+    "index": 193
   }
 ]
