@@ -65,10 +65,6 @@ const CodeBlock = async ({ children, className }) => {
 };
 
 export async function generateStaticParams() {
-    // const { slug } = params;
-    // const res = await fetch(`https://raw.githubusercontent.com/yangshun/top-javascript-interview-questions/refs/heads/main/questions/${slug}/en-US.mdx`);
-    // const data = await res.text();
-    // return { data }
     const data = questions.map(item => ({ slug: item.slug }))
     return data;
 }
