@@ -2,492 +2,1127 @@
 @tailwind components;
 @tailwind utilities;
 
-/* app/globals.css */
-
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
+:root {
+  --bg: #fff4e0;
+  --bg-elevated: #ffffff;
+  --bg-surface: #fff4e0;
+  --bg-alt: #ffcaf2;
+  --panel: #ffffff;
+  --text: #000000;
+  --text-muted: #5a5a5a;
+  --text-faint: #aeaeae;
+  --border: #000000;
+  --border-subtle: #000000;
+  --brand: #ffea8e;
+  --brand-2: #fae583;
+  --danger: #e63946;
+  --success: #22c55e;
+  --code-bg: #1a1a2e;
+  --neo-pink: #ffcaf2;
+  --neo-blue: #a5d7e8;
+  --neo-yellow: #fdff8f;
+  --neo-green: #b6ff9c;
+  --neo-purple: #d8b4fe;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Neo-brutalist dark theme ─────────────────────────────── */
+.dark {
+  --bg: #1a1a2e;
+  --bg-elevated: #242442;
+  --bg-surface: #1e1e38;
+  --bg-alt: #2e1a30;
+  --panel: #242442;
+  --text: #f0f0f0;
+  --text-muted: #a8a8b8;
+  --text-faint: #65657a;
+  --border: #f0f0f0;
+  --border-subtle: #3a3a55;
+  --brand: #ffea8e;
+  --brand-2: #fae583;
+  --danger: #ff6b6b;
+  --success: #69f0ae;
+  --code-bg: #0d0d1a;
+  --neo-pink: #ff9ed8;
+  --neo-blue: #7ec8e3;
+  --neo-yellow: #ffe066;
+  --neo-green: #7dff6b;
+  --neo-purple: #c49bff;
+  color-scheme: dark;
+}
+
+/* ── Dark theme: accent background contrast fixes ──────────── */
+/* Neo-accent backgrounds are bright → text must be dark for contrast */
+
+/* Static neo backgrounds */
+.dark [class~="bg-[var(--neo-yellow)]"],
+.dark [class~="bg-[var(--neo-green)]"],
+.dark [class~="bg-[var(--neo-blue)]"],
+.dark [class~="bg-[var(--neo-pink)]"],
+.dark [class~="bg-[var(--neo-purple)]"],
+.dark [class~="bg-[var(--brand)]"] {
+  color: #000;
+}
+
+/* Restore text color on dark-bg children inside bright-bg ancestors */
+.dark .panel,
+.dark .card,
+.dark [class~="bg-[var(--bg-elevated)]"],
+.dark [class~="bg-[var(--bg-surface)]"],
+.dark [class~="bg-[var(--code-bg)]"],
+.dark .editor-chrome {
+  color: var(--text);
+}
+
+/* Hover-activated neo backgrounds */
+.dark [class*="hover\:bg-[var(--neo-yellow)]"]:hover,
+.dark [class*="hover\:bg-[var(--neo-green)]"]:hover,
+.dark [class*="hover\:bg-[var(--neo-blue)]"]:hover,
+.dark [class*="hover\:bg-[var(--neo-pink)]"]:hover,
+.dark [class*="hover\:bg-[var(--brand)]"]:hover {
+  color: #000;
+}
+
+/* Structural class overrides for dark theme */
+.dark .nav-link:hover {
+  color: #000;
+}
+
+.dark .nav-link-active {
+  color: #000;
+}
+
+.dark .btn-land-primary {
+  color: #000;
+}
+
+.dark .btn-land-secondary {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: 4px 4px 0px 0px var(--brand);
+}
+
+.dark .btn-land-secondary:hover {
+  box-shadow: 6px 6px 0px 0px var(--brand);
+}
+
+.dark .cta-banner,
+.dark .cta-banner * {
+  color: #000;
+}
+
+.dark .company-pill {
+  color: #000;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.55;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
-body {
-  font-family: var(--font-work-sans);
-}
-
-.prose {
-  color: #3f3f46;
-  max-width: none;
-}
-
-.prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-}
-
-.prose
-  :where([class~="lead"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  color: var(--tw-prose-lead);
-  font-size: 1.25em;
-  line-height: 1.6;
-  margin-top: 1.2em;
-  margin-bottom: 1.2em;
-}
-
-.prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-links);
+a {
+  color: inherit;
   text-decoration: none;
-  font-weight: 500;
 }
 
-.prose
-  :where(strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: #18181b;
-  font-weight: 500;
+.code-font {
+  font-family: var(--font-mono), monospace;
 }
 
-.prose
-  :where(a strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-  font-weight: inherit;
+.font-display {
+  font-family: var(--font-display), sans-serif;
 }
 
-.prose
-  :where(blockquote strong):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  color: inherit;
+.container-page {
+  @apply mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8;
 }
 
-.prose
-  :where(thead th strong):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  color: inherit;
+.panel {
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 4px 4px 0px 0px var(--border);
 }
 
-.prose :where(ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  list-style-type: decimal;
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-  padding-left: 1.625em;
+.card {
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
-.prose
-  :where(ol[type="A"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: upper-alpha;
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
 }
 
-.prose
-  :where(ol[type="a"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: lower-alpha;
+/* ── Monaco Editor chrome ─────────────────────────────────── */
+
+/* Thin scrollbar for sidebar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border);
 }
 
-.prose
-  :where(ol[type="A s"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: upper-alpha;
+.editor-chrome {
+  background: var(--code-bg);
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
 }
 
-.prose
-  :where(ol[type="a s"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: lower-alpha;
+.editor-chrome .monaco-editor,
+.editor-chrome .monaco-editor .overflow-guard {
+  border-radius: 0 !important;
 }
 
-.prose
-  :where(ol[type="I"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: upper-roman;
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  --tw-ring-color: var(--border);
+  --tw-ring-offset-color: var(--bg);
 }
 
-.prose
-  :where(ol[type="i"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: lower-roman;
+.nav-link {
+  @apply inline-flex min-h-[40px] items-center px-3 text-sm font-bold;
+  font-family: var(--font-display), sans-serif;
+  color: var(--text);
+  border: 2px solid transparent;
+  transition: border-color 120ms ease, background-color 120ms ease;
 }
 
-.prose
-  :where(ol[type="I s"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: upper-roman;
+.nav-link:hover {
+  color: var(--text);
+  background: var(--brand);
+  border-color: var(--border);
 }
 
-.prose
-  :where(ol[type="i s"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: lower-roman;
+.nav-link-active {
+  color: var(--text);
+  background: var(--brand);
+  border: 2px solid var(--border);
+  box-shadow: 2px 2px 0px 0px var(--border);
 }
 
-.prose
-  :where(ol[type="1"]):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  list-style-type: decimal;
+.mdx-body {
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.7;
 }
 
-.prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  list-style-type: disc;
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-  padding-left: 1.625em;
+.mdx-body h2 {
+  @apply mt-8 text-xl font-semibold;
+  font-family: var(--font-display), sans-serif;
 }
 
-.prose
-  :where(ol > li):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  )::marker {
-  font-weight: 400;
-  color: var(--tw-prose-counters);
+.mdx-body h3 {
+  @apply mt-6 text-lg font-semibold;
+  font-family: var(--font-display), sans-serif;
 }
 
-.prose
-  :where(ul > li):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  )::marker {
-  color: var(--tw-prose-bullets);
+.mdx-body p {
+  @apply mt-3 leading-7;
+  font-family: var(--font-body), sans-serif;
+  color: var(--text-muted);
 }
 
-.prose :where(dt):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
+.mdx-body ul {
+  @apply mt-3 list-disc pl-6;
+  font-family: var(--font-body), sans-serif;
+  color: var(--text-muted);
+}
+
+.mdx-body li {
+  @apply mt-1;
+  font-family: var(--font-body), sans-serif;
+}
+
+.mdx-body pre {
+  @apply overflow-x-auto border-0 bg-transparent p-0;
+}
+
+.mdx-body .code-block-container {
+  @apply mt-5 mb-1;
+}
+
+.mdx-body .code-block-container table {
+  padding: 0.75rem 0;
+}
+
+.mdx-body .code-block-container code {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.mdx-body code {
+  font-family: var(--font-mono), monospace;
+}
+
+.mdx-body p code,
+.mdx-body li code {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  background: var(--neo-yellow);
+  color: #000;
+  border: 1px solid var(--border);
+}
+
+.mdx-body strong {
+  color: var(--text);
   font-weight: 600;
-  margin-top: 1.25em;
 }
 
-.prose :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  border-color: #e4e4e7;
-  border-top-width: 1px;
-  margin-top: 3em;
-  margin-bottom: 3em;
+/* ── Links (Resources section) ──────────────────────────────── */
+.mdx-body a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: background-color 150ms ease;
 }
 
-.prose
-  :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 500;
-  font-style: italic;
-  color: var(--tw-prose-quotes);
-  border-left-width: 0.25rem;
-  border-left-color: var(--tw-prose-quote-borders);
-  quotes: "\201C""\201D""\2018""\2019";
-  margin-top: 1.6em;
-  margin-bottom: 1.6em;
-  padding-left: 1em;
+.mdx-body a:hover {
+  background: var(--neo-yellow);
 }
 
-.prose
-  :where(blockquote p:first-of-type):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ):before {
-  content: open-quote;
+/* ── Collapsible Solution (details/summary) ─────────────────── */
+.mdx-body details {
+  @apply mt-4;
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 3px 3px 0px 0px var(--border);
 }
 
-.prose
-  :where(blockquote p:last-of-type):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ):after {
-  content: close-quote;
+.mdx-body details summary {
+  @apply cursor-pointer select-none px-4 py-3 text-sm font-bold;
+  font-family: var(--font-display), sans-serif;
+  color: var(--text);
+  list-style: none;
+  transition: background-color 150ms ease;
 }
 
-.prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
-  font-weight: 800;
-  font-size: 2.25em;
-  margin-top: 0;
-  margin-bottom: 0.8888889em;
-  line-height: 1.1111111;
+.mdx-body details summary::-webkit-details-marker {
+  display: none;
 }
 
-.prose
-  :where(h1 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 900;
-  color: inherit;
+.mdx-body details summary::before {
+  content: "▶ ";
+  display: inline-block;
+  font-size: 0.7em;
+  margin-right: 0.5em;
+  transition: transform 200ms ease;
 }
 
-.prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
-  font-weight: 700;
-  font-size: 1.5em;
-  margin-top: 2em;
-  margin-bottom: 0.6666666666666666em;
-  line-height: 1.3333333;
+.mdx-body details[open] summary::before {
+  transform: rotate(90deg);
 }
 
-.prose
-  :where(h2 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 800;
-  color: inherit;
+.mdx-body details summary:hover {
+  background: var(--neo-yellow);
+  color: #000;
 }
 
-.prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
-  font-weight: 600;
-  font-size: 1.25em;
-  margin-top: 2.4em;
-  margin-bottom: 0.6em;
-  line-height: 1.4;
+.mdx-body details[open] summary {
+  color: #000;
+  border-bottom: 2px solid var(--border);
+  background: var(--brand);
 }
 
-.prose
-  :where(h3 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 700;
-  color: inherit;
+.mdx-body details > .code-block-container {
+  @apply mt-0 border-0 border-t-0;
 }
 
-.prose :where(h4):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
-  font-weight: 600;
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-  line-height: 1.5;
-  font-size: 1.125em;
-}
-
-.prose
-  :where(h4 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 700;
-  color: inherit;
-}
-
-.prose :where(img):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.prose
-  :where(picture):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  display: block;
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.prose :where(kbd):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  font-weight: 500;
-  font-family: inherit;
-  color: #3f3f46;
-  box-shadow: 0 0 0 1px rgb(var(--tw-prose-kbd-shadows) / 10%),
-    0 3px 0 rgb(var(--tw-prose-kbd-shadows) / 10%);
-  font-size: 0.875em;
-  border-radius: 4px;
-  background: #f4f4f5;
-  border-width: 1px;
-  border-color: #e4e4e7;
-  padding: 0.125em 0.25em;
-  font-variant-ligatures: none;
-  margin: 0 1px;
-}
-
-.prose :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-code);
-  font-weight: 500;
-  font-size: 0.875em;
-  font-variant-ligatures: none;
-}
-
-.prose
-  :where(code):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ):before {
-  content: "`";
-}
-
-.prose
-  :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)):after {
-  content: "`";
-}
-
-.prose
-  :where(a code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-  font-weight: inherit;
-}
-
-.prose
-  :where(h1 code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-}
-
-.prose
-  :where(h2 code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-  font-size: 0.875em;
-}
-
-.prose
-  :where(h3 code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-  font-size: 0.9em;
-}
-
-.prose
-  :where(h4 code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: inherit;
-}
-
-.prose
-  :where(blockquote code):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  color: inherit;
-}
-
-.prose
-  :where(thead th code):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  color: inherit;
-}
-
-.prose :where(pre):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: #fafafa;
-  background-color: var(--tw-prose-pre-bg);
-  overflow-x: auto;
-  font-weight: 400;
-  font-size: 0.875em;
-  line-height: 1.7142857;
-  margin-top: 1.4285714285714286em;
-  margin-bottom: 2.2857142857142856em;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-}
-
-.prose
-  :where(pre code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  background-color: transparent;
-  border-width: 0;
+.mdx-body details > .code-block-container {
   border-radius: 0;
-  padding: 0;
-  font-weight: inherit;
-  color: inherit;
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  flex: none;
-  min-width: 100%;
 }
 
-.prose
-  :where(pre code):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ):before {
-  content: none;
+/* ── Landing page utilities ─────────────────────────────────── */
+
+.hero-gradient-text {
+  background: var(--neo-green);
+  padding: 0 0.15em;
+  -webkit-text-fill-color: var(--text);
 }
 
-.prose
-  :where(pre code):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ):after {
-  content: none;
+.btn-land-primary {
+  background: var(--brand);
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.btn-land-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
 }
 
-.prose :where(table):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  width: 100%;
-  table-layout: auto;
-  text-align: left;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+.btn-land-secondary {
+  border: 3px solid var(--border);
+  background: var(--text);
+  color: #ffffff;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  box-shadow: 4px 4px 0px 0px var(--brand);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.btn-land-secondary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--brand);
 }
 
-.prose :where(thead):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  border-bottom-width: 1px;
-  border-bottom-color: #e4e4e7;
-  color: #3f3f46;
+.feature-card {
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.feature-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
 }
 
-.prose
-  :where(thead th):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-headings);
-  font-weight: 500;
-  vertical-align: bottom;
-  padding: 0 0.5714286em 0.5714286em;
+.why-card {
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 3px 3px 0px 0px var(--border);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.why-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px 0px var(--border);
 }
 
-.prose
-  :where(tbody tr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  border-bottom-width: 1px;
-  border-bottom-color: #f4f4f5;
+.cta-banner {
+  border: 3px solid var(--border);
+  background: var(--neo-pink);
+  box-shadow: 6px 6px 0px 0px var(--border);
 }
 
-.prose
-  :where(tbody tr:last-child):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  border-bottom-width: 1px;
+.company-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--border);
+  padding: 0.125rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-display), sans-serif;
+  color: var(--text);
+  background: var(--neo-blue);
+  box-shadow: 2px 2px 0px 0px var(--border);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.company-pill:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px 0px var(--border);
 }
 
-.prose
-  :where(tbody td):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  vertical-align: baseline;
+/* ── Quiz prose typography ──────────────────────────────────── */
+
+.quiz-prose {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-muted);
 }
 
-.prose :where(tfoot):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  border-top-width: 1px;
-  border-top-color: var(--tw-prose-th-borders);
+.quiz-prose > * + * {
+  margin-top: 1.25em;
 }
 
-.prose
-  :where(tfoot td):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  vertical-align: top;
+/* ─ Headings ─ */
+.quiz-prose h1 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.prose
-  :where(figure > *):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 0;
+.quiz-prose h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--border);
+}
+
+.quiz-prose h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-prose h4 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-prose h5,
+.quiz-prose h6 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ─ Paragraphs ─ */
+.quiz-prose p {
+  margin-top: 1em;
+  margin-bottom: 0;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.quiz-prose > p:first-child,
+.quiz-prose h2 + p,
+.quiz-prose h3 + p,
+.quiz-prose h4 + p {
+  margin-top: 0.5em;
+}
+
+/* ─ Strong / em ─ */
+.quiz-prose strong {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.quiz-prose em {
+  font-style: italic;
+}
+
+/* ─ Links ─ */
+.quiz-prose a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: background-color 150ms ease;
+}
+.quiz-prose a:hover {
+  background: var(--neo-yellow);
+}
+
+/* ─ Lists ─ */
+.quiz-prose ul {
+  list-style: disc;
+  padding-left: 1.625em;
+  margin-top: 1em;
   margin-bottom: 0;
 }
 
-.prose
-  :where(figcaption):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  color: var(--tw-prose-captions);
+.quiz-prose ol {
+  list-style: decimal;
+  padding-left: 1.625em;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+.quiz-prose li {
+  margin-top: 0.5em;
+  padding-left: 0.375em;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.quiz-prose li::marker {
+  color: var(--text-faint);
+}
+
+.quiz-prose li > ul,
+.quiz-prose li > ol {
+  margin-top: 0.5em;
+}
+
+/* ─ Inline code ─ */
+.quiz-prose code {
+  font-family: var(--font-mono), monospace;
   font-size: 0.875em;
-  line-height: 1.4285714;
-  margin-top: 0.8571429em;
+  font-weight: 500;
+  padding: 0.2em 0.45em;
+  background: var(--neo-yellow);
+  color: #000;
+  border: 1px solid var(--border);
 }
 
-.prose pre {
-  padding: 16px 40px;
-  border-radius: 8px;
-  /* width: max-content; */
-  background-color: black;
+/* Reset for code inside pre (syntax highlighted blocks) */
+.quiz-prose pre code {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+  display: block;
 }
 
-.prose a {
-  color: violet;
+/* ─ Code blocks (pre) ─ */
+.quiz-prose .code-block {
+  border: 2px solid var(--border);
+  background: var(--code-bg);
+  box-shadow: 3px 3px 0px 0px var(--border);
+  overflow: hidden;
 }
 
-/* .shiki-code { not required keeping it for refrence
-  overflow: auto; 
-  padding: 1em;
-  background-color: #282c34;
-  border-radius: 5px;
-} */
+.quiz-prose .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.quiz-prose .code-block-header span {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint);
+}
+
+.quiz-prose .code-block-body {
+  overflow-x: auto;
+  /* padding: 1rem 1.25rem; */
+}
+
+.quiz-prose .code-block-body pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  overflow: visible;
+}
+
+/* ─ Shiki output styling ─ */
+.quiz-prose .shiki-output {
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0px 0px var(--border);
+  overflow: hidden;
+}
+
+.quiz-prose .shiki-output pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background: var(--code-bg) !important;
+  border: none;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.quiz-prose .shiki-output code {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 400;
+}
+
+/* ─ Blockquotes ─ */
+.quiz-prose blockquote {
+  border-left: 4px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  background: var(--neo-blue);
+}
+
+.quiz-prose blockquote p {
+  margin-top: 0;
+  color: var(--text);
+  font-style: italic;
+}
+
+/* ─ Horizontal rule ─ */
+.quiz-prose hr {
+  border: none;
+  border-top: 3px solid var(--border);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ─ Tables ─ */
+.quiz-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  font-size: 0.875rem;
+  border: 2px solid var(--border);
+}
+
+.quiz-prose thead th {
+  font-weight: 700;
+  font-family: var(--font-display), sans-serif;
+  color: var(--text);
+  text-align: left;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 3px solid var(--border);
+  background: var(--brand);
+}
+
+.quiz-prose tbody td {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-muted);
+}
+
+.quiz-prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─ Images ─ */
+.quiz-prose img {
+  border-radius: 0.75rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─ Details/Summary ─ */
+.quiz-prose details {
+  margin-top: 1.25em;
+  border: 2px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: 3px 3px 0px 0px var(--border);
+  overflow: hidden;
+}
+
+.quiz-prose details summary {
+  cursor: pointer;
+  user-select: none;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: var(--font-display), sans-serif;
+  color: var(--text);
+  list-style: none;
+  transition: background-color 150ms ease;
+}
+
+.quiz-prose details summary::-webkit-details-marker {
+  display: none;
+}
+
+.quiz-prose details summary::before {
+  content: "▶ ";
+  display: inline-block;
+  font-size: 0.65em;
+  margin-right: 0.5em;
+  transition: transform 200ms ease;
+}
+
+.quiz-prose details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.quiz-prose details summary:hover {
+  background: var(--neo-yellow);
+}
+
+.quiz-prose details[open] summary {
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
+  background: var(--brand);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CLASSIC STYLE — activated via data-style="classic" on <html>
+   Overrides the neo-brutalist structural styles back to a
+   conventional rounded, subtle-shadow design.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Classic light palette ──────────────────────────────────── */
+[data-style="classic"] {
+  --bg: #ffffff;
+  --bg-elevated: #fafafa;
+  --bg-surface: #f5f5f5;
+  --bg-alt: #f0f0f0;
+  --panel: #ffffff;
+  --text: #171717;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+  --border: #e5e7eb;
+  --border-subtle: #f3f4f6;
+  --brand: #6366f1;
+  --brand-2: #818cf8;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --code-bg: #1e1e2e;
+  --neo-pink: #fce7f3;
+  --neo-blue: #dbeafe;
+  --neo-yellow: #fef9c3;
+  --neo-green: #dcfce7;
+  --neo-purple: #f3e8ff;
+  color-scheme: light;
+}
+
+/* ── Classic dark palette ───────────────────────────────────── */
+[data-style="classic"].dark {
+  --bg: #0f0f0f;
+  --bg-elevated: #1a1a1a;
+  --bg-surface: #141414;
+  --bg-alt: #1f1f1f;
+  --panel: #1a1a1a;
+  --text: #f5f5f5;
+  --text-muted: #a1a1aa;
+  --text-faint: #52525b;
+  --border: #2e2e2e;
+  --border-subtle: #262626;
+  --brand: #818cf8;
+  --brand-2: #a5b4fc;
+  --danger: #f87171;
+  --success: #4ade80;
+  --code-bg: #0a0a0a;
+  --neo-pink: #1f1a1e;
+  --neo-blue: #1a1f2b;
+  --neo-yellow: #1f1e1a;
+  --neo-green: #1a1f1a;
+  --neo-purple: #1e1a2b;
+  color-scheme: dark;
+}
+
+/* ── Global: kill Archivo Black display font ───────────────── */
+[data-style="classic"] * {
+  font-family: var(--font-body), system-ui, sans-serif !important;
+}
+
+[data-style="classic"] code,
+[data-style="classic"] pre,
+[data-style="classic"] .code-font,
+[data-style="classic"] kbd {
+  font-family: var(--font-mono), monospace !important;
+}
+
+/* ── Global: soften ALL borders, shadows, radii ────────────── */
+[data-style="classic"] *:not(hr):not(table):not(thead):not(tbody):not(tr):not(th):not(td) {
+  border-radius: 0.375rem;
+  border-color: var(--border);
+}
+
+/* Selectively shrink thick borders */
+[data-style="classic"] header,
+[data-style="classic"] footer,
+[data-style="classic"] aside,
+[data-style="classic"] nav,
+[data-style="classic"] section,
+[data-style="classic"] article,
+[data-style="classic"] div,
+[data-style="classic"] span,
+[data-style="classic"] a,
+[data-style="classic"] button,
+[data-style="classic"] input,
+[data-style="classic"] select,
+[data-style="classic"] textarea,
+[data-style="classic"] label {
+  border-width: 0;
+}
+
+/* Re-apply 1px border where needed */
+[data-style="classic"] .card,
+[data-style="classic"] .panel,
+[data-style="classic"] .feature-card,
+[data-style="classic"] .why-card {
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-style="classic"] .card:hover,
+[data-style="classic"] .feature-card:hover,
+[data-style="classic"] .why-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ── Global: kill ALL hard offset shadows ──────────────────── */
+[data-style="classic"] [style*="box-shadow"],
+[data-style="classic"] .card,
+[data-style="classic"] .panel,
+[data-style="classic"] .feature-card,
+[data-style="classic"] .why-card,
+[data-style="classic"] .editor-chrome,
+[data-style="classic"] .cta-banner {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
+[data-style="classic"] header {
+  border-bottom: 1px solid var(--border) !important;
+  border-width: 0 0 1px 0 !important;
+  border-style: solid !important;
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+[data-style="classic"] footer {
+  background: var(--bg-surface) !important;
+  color: var(--text) !important;
+  border-top: 1px solid var(--border) !important;
+  border-width: 1px 0 0 0 !important;
+  border-style: solid !important;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────── */
+[data-style="classic"] aside {
+  border-right: 1px solid var(--border) !important;
+  border-width: 0 1px 0 0 !important;
+  border-style: solid !important;
+}
+
+/* ── Nav links ─────────────────────────────────────────────── */
+[data-style="classic"] .nav-link {
+  border-radius: 0.375rem !important;
+  border: 1px solid transparent !important;
+  font-weight: 500 !important;
+}
+
+[data-style="classic"] .nav-link:hover {
+  background: var(--bg-surface) !important;
+  border-color: transparent !important;
+}
+
+[data-style="classic"] .nav-link-active {
+  border: 1px solid var(--brand) !important;
+  border-radius: 0.375rem !important;
+  box-shadow: none !important;
+  background: var(--brand) !important;
+  color: #ffffff !important;
+}
+
+/* ── Landing page ──────────────────────────────────────────── */
+[data-style="classic"] .hero-gradient-text {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  padding: 0 !important;
+}
+
+[data-style="classic"] .btn-land-primary {
+  border: 1px solid var(--brand) !important;
+  border-radius: 0.5rem !important;
+  background: var(--brand) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3) !important;
+  font-weight: 600 !important;
+}
+
+[data-style="classic"] .btn-land-primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35) !important;
+}
+
+[data-style="classic"] .btn-land-secondary {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.5rem !important;
+  background: var(--bg-elevated) !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  font-weight: 600 !important;
+}
+
+[data-style="classic"] .btn-land-secondary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-style="classic"] .company-pill {
+  border: 1px solid var(--border) !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+  background: var(--bg-surface) !important;
+  font-weight: 500 !important;
+}
+
+[data-style="classic"] .company-pill:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: var(--neo-blue) !important;
+}
+
+[data-style="classic"] .cta-banner {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  background: var(--bg-surface) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Editor chrome ─────────────────────────────────────────── */
+[data-style="classic"] .editor-chrome {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ── Focus ring ────────────────────────────────────────────── */
+[data-style="classic"] .focus-ring {
+  --tw-ring-color: var(--brand) !important;
+}
+
+/* ── Form elements ─────────────────────────────────────────── */
+[data-style="classic"] input,
+[data-style="classic"] select,
+[data-style="classic"] textarea {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.375rem !important;
+  box-shadow: none !important;
+}
+
+[data-style="classic"] button {
+  box-shadow: none !important;
+}
+
+/* ── Badges & pills: soften ALL inline neo elements ────────── */
+/* These target the inline Tailwind-styled spans/buttons */
+[data-style="classic"] span[class*="border"],
+[data-style="classic"] a[class*="border"] {
+  border-width: 1px !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+}
+
+/* Number squares → circles */
+[data-style="classic"] span[class*="h-7"][class*="w-7"],
+[data-style="classic"] span[class*="h-8"][class*="w-8"],
+[data-style="classic"] span[class*="h-6"][class*="w-6"] {
+  border-radius: 50% !important;
+  border-width: 1px !important;
+  box-shadow: none !important;
+}
+
+/* ── Dividers in list containers ───────────────────────────── */
+[data-style="classic"] div[class*="divide"] {
+  border-width: 1px !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Sidebar panels ────────────────────────────────────────── */
+[data-style="classic"] aside div[class*="border"] {
+  border-width: 1px !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Progress bars ─────────────────────────────────────────── */
+[data-style="classic"] div[class*="bg-"][class*="h-2"],
+[data-style="classic"] div[class*="bg-"][class*="h-3"],
+[data-style="classic"] div[class*="bg-"][class*="h-1"] {
+  border-radius: 9999px !important;
+}
+
+/* ── ThemeToggle button ────────────────────────────────────── */
+[data-style="classic"] button[aria-label="Toggle color theme"] {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.375rem !important;
+  box-shadow: none !important;
+}
+
+[data-style="classic"] button[aria-label="Toggle color theme"]:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: var(--bg-surface) !important;
+}
+
+/* ── Active nav link text fix ──────────────────────────────── */
+[data-style="classic"] .nav-link-active * {
+  color: #ffffff !important;
+}
+
+/* ── Classic brand-bg buttons need white text ──────────────── */
+[data-style="classic"] button[class*="bg-[var(--brand)"] {
+  color: #ffffff !important;
+  border-radius: 0.375rem !important;
+}
+
+/* ── Quiz / MDX prose ──────────────────────────────────────── */
+[data-style="classic"] .quiz-prose details,
+[data-style="classic"] .mdx-body details {
+  border-width: 1px !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-style="classic"] .quiz-prose details summary:hover,
+[data-style="classic"] .mdx-body details summary:hover {
+  background: var(--bg-surface) !important;
+}
+
+[data-style="classic"] .quiz-prose details[open] summary,
+[data-style="classic"] .mdx-body details[open] summary {
+  background: var(--bg-surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+[data-style="classic"] .quiz-prose .code-block,
+[data-style="classic"] .quiz-prose .shiki-output {
+  border-width: 1px !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-style="classic"] .quiz-prose blockquote {
+  background: var(--bg-surface) !important;
+  border-left-color: var(--brand) !important;
+  border-radius: 0 !important;
+}
+
+[data-style="classic"] .quiz-prose p code,
+[data-style="classic"] .quiz-prose code,
+[data-style="classic"] .mdx-body p code,
+[data-style="classic"] .mdx-body li code {
+  background: var(--bg-surface) !important;
+  border-radius: 0.25rem !important;
+  border-color: var(--border) !important;
+}
+
+[data-style="classic"] .quiz-prose a:hover,
+[data-style="classic"] .mdx-body a:hover {
+  background: transparent !important;
+  color: var(--brand) !important;
+}
+
+/* ── Auth page: soften background ──────────────────────────── */
+[data-style="classic"] div[class*="bg-[var(--neo-pink)]"] {
+  background: var(--bg-surface) !important;
+}

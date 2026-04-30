@@ -1,0 +1,11 @@
+{
+  "slug": "js-event-loop-advanced",
+  "title": "JavaScript Event Loop — Advanced",
+  "topic": "JavaScript",
+  "difficulty": "hard",
+  "estimatedMinutes": 15,
+  "questionCount": 10,
+  "formats": ["mcq", "true-false", "spot-the-bug"],
+  "published": true,
+  "description": "Microtasks, queueMicrotask, scheduler priority, and async ordering under real-world pressure."
+}

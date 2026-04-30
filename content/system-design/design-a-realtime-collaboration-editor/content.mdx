@@ -1,0 +1,74 @@
+## Problem Statement
+
+Design a browser-based collaborative editor where multiple users can edit the same document in near real time, with cursor presence, offline tolerance, and durable revision history.
+
+## Clarifying Questions
+
+- Maximum concurrent editors per document and expected global scale?
+- Consistency target: eventual, causal, or stronger guarantees for specific operations?
+- Is offline editing mandatory or best effort?
+- What audit/history retention requirements exist?
+- Are binary embeds and rich text marks in scope for v1?
+
+## Core Requirements
+
+Functional requirements:
+
+- Live collaborative text editing with low-latency updates.
+- Remote cursor and selection presence.
+- Document version history and restore points.
+- Basic permission model: owner, editor, viewer.
+
+Non-functional requirements:
+
+- P95 local echo under 50ms on stable networks.
+- Conflict-safe merges without data loss.
+- Durable persistence with multi-region failover strategy.
+- Observable operational metrics and per-document diagnostics.
+
+## High-Level Architecture
+
+```text
+Browser Client
+  - Operational model / CRDT buffer
+  - Presence + transport manager
+        |
+        v
+Realtime Gateway (WebSocket)
+  - AuthN/AuthZ
+  - Room membership + fanout
+        |
+        +--> Collaboration Engine (OT/CRDT merge)
+        +--> Presence Service (ephemeral state)
+        +--> Persistence Pipeline (append log + snapshots)
+        |
+        v
+Storage
+  - Event log store
+  - Snapshot store
+  - Metadata DB
+```
+
+## Deep Dives
+
+### Conflict Resolution Model
+
+Choose CRDT when offline edits and peer merge resilience dominate. Choose OT when central ordering and operation transforms are easier to control with a server-authoritative pipeline.
+
+### Presence And Ephemeral Data
+
+Presence should not be written to primary document history. Keep it in low-TTL in-memory state and broadcast diffs to room members to minimize write amplification.
+
+### Persistence And Recovery
+
+Persist operation logs for replayability, then compact into periodic snapshots. On reconnect, bootstrap from latest snapshot and replay tail operations to reduce cold-start latency.
+
+## Trade-offs
+
+- CRDT simplifies decentralization but can increase memory and wire payload overhead.
+- OT centralizes control but increases transform complexity as feature surface grows.
+- Frequent snapshots speed recovery while increasing storage and compaction compute costs.
+
+## What Great Looks Like
+
+A strong senior answer picks OT or CRDT and sketches data flow. A staff-level answer defines failure domains, backpressure strategy, replay guarantees, schema evolution, and measurable SLOs tied to editor UX outcomes.

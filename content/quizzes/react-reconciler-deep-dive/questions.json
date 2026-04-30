@@ -1,0 +1,106 @@
+[
+  {
+    "id": "rq1",
+    "type": "mcq",
+    "question": "What is the primary role of Fiber nodes in React?",
+    "options": [
+      { "id": "a", "text": "Store DOM elements directly" },
+      { "id": "b", "text": "Represent units of work for reconciliation" },
+      { "id": "c", "text": "Replace JavaScript call stack" },
+      { "id": "d", "text": "Serialize component state to JSON" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Fiber is a linked node structure that tracks pending work, props, state, and effect metadata. It lets React pause and resume rendering units cooperatively. It does not literally replace the JS call stack, but avoids deep recursive dependence on it. Thinking of Fiber as only virtual DOM storage is too shallow."
+  },
+  {
+    "id": "rq2",
+    "type": "true-false",
+    "question": "Concurrent rendering means React can interrupt and restart rendering work before commit.",
+    "options": [
+      { "id": "a", "text": "True" },
+      { "id": "b", "text": "False" }
+    ],
+    "correctOptionId": "a",
+    "explanation": "In concurrent mode, render work is interruptible and can be restarted with newer updates. Commit remains synchronous for consistency. This distinction explains why side effects must be deferred to commit-safe hooks. Many bugs come from assuming render is always single-pass."
+  },
+  {
+    "id": "rq3",
+    "type": "mcq",
+    "question": "Which hook is designed to avoid visual blocking updates by marking them lower priority?",
+    "options": [
+      { "id": "a", "text": "useLayoutEffect" },
+      { "id": "b", "text": "useMemo" },
+      { "id": "c", "text": "useTransition" },
+      { "id": "d", "text": "useImperativeHandle" }
+    ],
+    "correctOptionId": "c",
+    "explanation": "useTransition marks state updates as non-urgent, allowing urgent interactions to proceed first. It maps to lower-priority lanes. useMemo is for memoization, not scheduling. The wrong mental model is treating all state updates as equal urgency."
+  },
+  {
+    "id": "rq4",
+    "type": "spot-the-bug",
+    "question": "What performance issue exists in this list rendering?",
+    "code": "items.map((item, i) => <Row key={i} item={item} />)",
+    "language": "tsx",
+    "options": [
+      { "id": "a", "text": "Index keys break identity during reordering" },
+      { "id": "b", "text": "map is slower than forEach" },
+      { "id": "c", "text": "React requires numeric keys" },
+      { "id": "d", "text": "Row must be memoized always" }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Index keys cause unstable identity when insertion, deletion, or sorting occurs. React may reuse instances incorrectly, creating state leakage and extra work. map itself is fine. Memoization can help, but incorrect keys remain a core reconciliation bug."
+  },
+  {
+    "id": "rq5",
+    "type": "mcq",
+    "question": "What does Suspense boundary fallback represent during data fetching with concurrent rendering?",
+    "options": [
+      { "id": "a", "text": "A commit rollback of entire app" },
+      { "id": "b", "text": "A placeholder while boundary content is not ready" },
+      { "id": "c", "text": "A browser-native loading spinner" },
+      { "id": "d", "text": "A permanently mounted sibling subtree" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Suspense shows fallback UI until the boundary’s data/code dependencies resolve. It scopes waiting and avoids freezing unrelated regions. It is not a global rollback mechanism. Correct boundary placement is a major architecture decision in large apps."
+  },
+  {
+    "id": "rq6",
+    "type": "true-false",
+    "question": "The commit phase in React can be interrupted midway by a higher-priority update.",
+    "options": [
+      { "id": "a", "text": "True" },
+      { "id": "b", "text": "False" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Commit is synchronous and non-interruptible to preserve UI consistency. Interruption happens during render preparation, not DOM mutation commit. This is why side effects tied to DOM must run in commit-safe hooks. Assuming interruptible commit leads to race-condition misconceptions."
+  },
+  {
+    "id": "rq7",
+    "type": "mcq",
+    "question": "Why can stale closures appear in event handlers after state updates?",
+    "options": [
+      { "id": "a", "text": "Fiber mutates closure scopes" },
+      { "id": "b", "text": "Handlers capture render-time values" },
+      { "id": "c", "text": "React clears closures between renders" },
+      { "id": "d", "text": "Suspense pauses lexical environments" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Functions capture variables at the render they were created in. If a handler is reused without dependency refresh, it may reference stale state. Fiber scheduling does not mutate JS closures directly. The practical fix is dependency-safe callbacks or functional updates."
+  },
+  {
+    "id": "rq8",
+    "type": "spot-the-bug",
+    "question": "What subtle issue exists here?",
+    "code": "const value = useMemo(() => expensiveCompute(data), []);",
+    "language": "tsx",
+    "options": [
+      { "id": "a", "text": "useMemo cannot wrap pure functions" },
+      { "id": "b", "text": "Missing dependency causes stale memoized value" },
+      { "id": "c", "text": "expensiveCompute should return Promise" },
+      { "id": "d", "text": "useMemo runs only on server" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "An empty dependency array freezes the memoized result at initial render. If data changes, value becomes stale and logic diverges silently. useMemo is not a correctness primitive; dependencies must reflect inputs. This bug is common in optimization-driven regressions."
+  }
+]

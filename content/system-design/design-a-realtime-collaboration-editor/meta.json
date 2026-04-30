@@ -1,0 +1,8 @@
+{
+  "slug": "design-a-realtime-collaboration-editor",
+  "title": "Design a Realtime Collaboration Editor",
+  "difficulty": "expert",
+  "estimatedMinutes": 50,
+  "published": true,
+  "description": "Design conflict resolution, presence, persistence, and scaling strategy for a multi-user collaborative text editor."
+}

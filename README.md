@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Devpro UI
 
-## Getting Started
+Senior-level frontend interview preparation platform built with Next.js 16 App Router.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- Tailwind CSS
+- Zustand (client state)
+- Monaco Editor (`@monaco-editor/react`)
+- `next-mdx-remote` for guide/problem MDX rendering
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Quality Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Route Structure
 
-To learn more about Next.js, take a look at the following resources:
+### Marketing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/`
+- `/about`
+- `/pricing`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Platform
 
-## Deploy on Vercel
+- `/problems`
+- `/problems/[slug]`
+- `/quizzes`
+- `/quizzes/[slug]`
+- `/guides`
+- `/guides/[slug]`
+- `/system-design`
+- `/system-design/[slug]`
+- `/playground`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Auth
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/login`
+- `/signup`
+
+### APIs
+
+- `POST /api/problems/[slug]/run`
+- `POST /api/quizzes/[slug]/submit`
+- `POST /api/playground/format`
+
+## Content-Driven Data Model
+
+All learning content is file-based under `content/`:
+
+- `content/problems/[slug]/`
+- `content/quizzes/[slug]/`
+- `content/guides/[slug]/`
+- `content/system-design/[slug]/`
+
+Loaders in `src/lib/content/` read these files server-side. Content folders are validated defensively (missing `meta.json` or required files are ignored).
+
+## Notes
+
+- This implementation is JavaScript-first by design (TypeScript migration intentionally deferred).
+- `src/app/quiz/*` is a legacy route path retained from prior app iterations.

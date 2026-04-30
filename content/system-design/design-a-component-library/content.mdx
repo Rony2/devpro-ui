@@ -1,0 +1,70 @@
+## Problem Statement
+
+Design a reusable component library that supports three product teams shipping independent applications. The system must provide accessible primitives, themed product variants, and predictable version upgrade workflows with low regression risk.
+
+## Clarifying Questions
+
+- Is SSR required for all consuming apps or only selected products?
+- Do teams need CSS-in-JS compatibility, utility-first styling, or both?
+- What semver upgrade cadence is acceptable for each product team?
+- Is there a requirement for design token compatibility with native platforms?
+- How strict are backward-compatibility guarantees for component props?
+
+## Core Requirements
+
+Functional requirements:
+
+- Provide foundational primitives (button, input, modal, table, form controls).
+- Support multiple themes and density modes with token-driven styling.
+- Publish typed component APIs and usage docs with interactive examples.
+- Enable local overrides without forking core components.
+
+Non-functional requirements:
+
+- WCAG AA accessibility compliance baseline.
+- Fast adoption: &lt;30 minutes to install and render first production component.
+- Bundle discipline with tree-shakable ESM outputs.
+- Deterministic releases with changelogs and migration guidance.
+
+## High-Level Architecture
+
+```text
+Design Tokens (source of truth)
+        |
+        v
+Build Pipeline (token transforms + component build)
+        |
+        +--> @org/ui-tokens (platform packages)
+        +--> @org/ui-core (headless primitives)
+        +--> @org/ui-react (styled composites)
+        |
+        v
+Docs + Playground + Visual Regression CI
+        |
+        v
+Product Apps (consumers with pinned semver ranges)
+```
+
+## Deep Dives
+
+### API Design And Composition
+
+Expose low-level primitives with strict behavior contracts, then layer product-friendly composites on top. Keep escape hatches explicit (`asChild`, slot APIs, style overrides) to avoid hidden coupling.
+
+### Versioning And Release Safety
+
+Adopt semver with automated release notes and categorized change labels. Run consumer contract tests in CI against canary builds before promoting to stable.
+
+### Theming And Tokens
+
+Tokens should be the only source of visual truth. Component styles consume semantic tokens (for example `surface-elevated`), never raw values, so rebrands and product skins avoid component rewrites.
+
+## Trade-offs
+
+- Strict API governance slows rapid experimentation but prevents accidental breakage.
+- Layering core plus composite packages increases maintenance overhead but improves long-term flexibility.
+- Visual regression infrastructure adds CI time, yet massively reduces release anxiety for shared components.
+
+## What Great Looks Like
+
+A senior-level answer identifies packages and technologies. A staff-level answer defines ownership boundaries, compatibility policy, upgrade choreography, and failure handling under multi-team release pressure.

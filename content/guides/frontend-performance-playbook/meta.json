@@ -1,0 +1,10 @@
+{
+  "slug": "frontend-performance-playbook",
+  "title": "Frontend Performance Playbook For Senior Engineers",
+  "category": "Performance",
+  "difficulty": "hard",
+  "readingTimeMin": 14,
+  "lastUpdated": "2026-03-30",
+  "published": true,
+  "description": "Practical strategies for CPU, network, and rendering budgets in complex web applications."
+}
