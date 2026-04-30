@@ -1,0 +1,11 @@
+{
+  "slug": "react-reconciler-deep-dive",
+  "title": "React Reconciler Deep Dive",
+  "topic": "React",
+  "difficulty": "expert",
+  "estimatedMinutes": 18,
+  "questionCount": 8,
+  "formats": ["mcq", "spot-the-bug", "true-false"],
+  "published": true,
+  "description": "React 18 internals, lane priorities, Suspense behavior, and concurrent rendering trade-offs."
+}

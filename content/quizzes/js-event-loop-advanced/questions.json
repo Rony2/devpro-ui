@@ -1,0 +1,134 @@
+[
+  {
+    "id": "q1",
+    "type": "mcq",
+    "question": "What is the output order?",
+    "code": "console.log('a');\nPromise.resolve().then(() => console.log('b'));\nqueueMicrotask(() => console.log('c'));\nconsole.log('d');",
+    "language": "javascript",
+    "options": [
+      { "id": "a", "text": "a, b, c, d" },
+      { "id": "b", "text": "a, d, b, c" },
+      { "id": "c", "text": "a, d, c, b" },
+      { "id": "d", "text": "a, b, d, c" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Synchronous logs run first: a then d. Promise.then and queueMicrotask both schedule microtasks, drained after the current stack. The Promise callback is queued first, so b runs before c. A common mistake is assuming queueMicrotask always has higher priority."
+  },
+  {
+    "id": "q2",
+    "type": "spot-the-bug",
+    "question": "Identify the bug in this interval code.",
+    "code": "function Counter() {\n  let count = 0;\n  setInterval(() => count = count + 1, 1000);\n  return () => count;\n}",
+    "language": "javascript",
+    "options": [
+      { "id": "a", "text": "setInterval cannot mutate closures" },
+      { "id": "b", "text": "No cleanup API is returned for interval" },
+      { "id": "c", "text": "Closures freeze primitive values and never update" },
+      { "id": "d", "text": "Interval callbacks run in microtask queue" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "The function creates an interval but never exposes clearInterval, so the timer leaks. Closures do not freeze values; they reference bindings. Interval callbacks are macrotasks, not microtasks. The code can still count, but lifecycle and cleanup are incorrect."
+  },
+  {
+    "id": "q3",
+    "type": "true-false",
+    "question": "Microtasks are fully drained before the browser handles the next macrotask.",
+    "options": [
+      { "id": "a", "text": "True" },
+      { "id": "b", "text": "False" }
+    ],
+    "correctOptionId": "a",
+    "explanation": "This is true for standard event loop turns. After a macrotask completes, the runtime drains the microtask queue. Only then does it move to rendering and the next task source. The misconception is thinking one microtask runs per turn."
+  },
+  {
+    "id": "q4",
+    "type": "mcq",
+    "question": "Which callback can starve rendering if recursively scheduled?",
+    "options": [
+      { "id": "a", "text": "setTimeout(fn, 0)" },
+      { "id": "b", "text": "requestAnimationFrame(fn)" },
+      { "id": "c", "text": "queueMicrotask(fn)" },
+      { "id": "d", "text": "setInterval(fn, 16)" }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Recursively queueing microtasks can monopolize post-task processing and block paint. setTimeout and interval yield between task turns. requestAnimationFrame is aligned with paint and generally cooperates with rendering. The trap is assuming only loops can starve UI."
+  },
+  {
+    "id": "q5",
+    "type": "mcq",
+    "question": "In Node.js, what queue runs before timers after the current phase?",
+    "options": [
+      { "id": "a", "text": "process.nextTick queue" },
+      { "id": "b", "text": "setImmediate queue" },
+      { "id": "c", "text": "check phase" },
+      { "id": "d", "text": "poll phase" }
+    ],
+    "correctOptionId": "a",
+    "explanation": "process.nextTick has special semantics and runs before other microtasks and phases. Overuse can starve I/O similarly to microtask abuse. setImmediate belongs to the check phase and is not first. Many engineers confuse Promise microtasks with nextTick ordering."
+  },
+  {
+    "id": "q6",
+    "type": "spot-the-bug",
+    "question": "What is wrong with this async loop?",
+    "code": "async function run(list) {\n  list.forEach(async (item) => {\n    await doWork(item);\n  });\n  return 'done';\n}",
+    "language": "javascript",
+    "options": [
+      { "id": "a", "text": "forEach callbacks cannot be async" },
+      { "id": "b", "text": "Function returns before awaited work completes" },
+      { "id": "c", "text": "Await only works in top-level module scope" },
+      { "id": "d", "text": "forEach runs in microtask queue" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "forEach does not await async callbacks, so run resolves immediately. A correct approach is for...of with await or Promise.all over map. The mistaken answer is that async callbacks are invalid; they are valid but not coordinated. This bug often appears in background processing pipelines."
+  },
+  {
+    "id": "q7",
+    "type": "mcq",
+    "question": "Why can setTimeout(fn, 0) run later than expected?",
+    "options": [
+      { "id": "a", "text": "Timers are converted into microtasks" },
+      { "id": "b", "text": "Minimum clamp and task queue backlog" },
+      { "id": "c", "text": "Promises preempt all future timers forever" },
+      { "id": "d", "text": "JavaScript always sleeps 4ms" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Timer delay is minimum scheduling delay, not execution guarantee. Browsers can clamp nested timers and existing queued work can postpone execution. It is wrong to model timeout as exact wake-up time. The event loop only runs one task at a time."
+  },
+  {
+    "id": "q8",
+    "type": "true-false",
+    "question": "requestAnimationFrame callbacks run before paint in the render opportunity.",
+    "options": [
+      { "id": "a", "text": "True" },
+      { "id": "b", "text": "False" }
+    ],
+    "correctOptionId": "a",
+    "explanation": "requestAnimationFrame is designed for visual updates and executes before the browser paints. This allows batching style/layout changes into a frame boundary. It is not equivalent to setTimeout(16). The browser may also throttle it in background tabs."
+  },
+  {
+    "id": "q9",
+    "type": "mcq",
+    "question": "Which is best for chunking CPU-heavy work to preserve responsiveness?",
+    "options": [
+      { "id": "a", "text": "Recursive queueMicrotask" },
+      { "id": "b", "text": "Single synchronous loop" },
+      { "id": "c", "text": "Split with setTimeout/MessageChannel yielding" },
+      { "id": "d", "text": "Promise.resolve in every iteration" }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Yielding to macrotasks lets the browser process input and paint between chunks. Recursive microtasks keep control too aggressively and can freeze UI. A fully synchronous loop blocks completely. MessageChannel and time-sliced scheduling are common production strategies."
+  },
+  {
+    "id": "q10",
+    "type": "mcq",
+    "question": "What does await Promise.resolve() guarantee?",
+    "options": [
+      { "id": "a", "text": "Immediate synchronous continuation" },
+      { "id": "b", "text": "Continuation in next microtask turn" },
+      { "id": "c", "text": "Continuation after next paint" },
+      { "id": "d", "text": "Continuation in timer phase" }
+    ],
+    "correctOptionId": "b",
+    "explanation": "await always pauses and resumes asynchronously via promise jobs. Even already-resolved promises continue on microtask timing, not synchronously inline. It does not imply paint or timer boundaries. This subtlety is critical when reasoning about mutation timing."
+  }
+]

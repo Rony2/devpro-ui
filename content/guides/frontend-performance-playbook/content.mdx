@@ -1,0 +1,61 @@
+## Establish Budgets First
+
+Performance work without budgets becomes endless optimization theater. Define explicit SLOs for interaction latency, route transitions, and bundle boundaries before touching code. Senior teams treat these as product constraints, not optional polish.
+
+## CPU Budgeting On The Main Thread
+
+Most UX regressions are CPU-bound, not network-bound. Profile long tasks and identify where reconciliation, serialization, or layout thrash dominates.
+
+```tsx
+import { startTransition } from "react";
+
+function onFilterChange(next: string) {
+  setInput(next);
+  startTransition(() => {
+    setDerivedResults(expensiveDerivation(next));
+  });
+}
+```
+
+Transitions improve responsiveness when expensive derivations are not user-blocking.
+
+## Network Strategy And Cache Topology
+
+Treat caching as a layered system:
+
+- CDN edge cache for static and versioned assets.
+- App-level revalidation policy for semi-static payloads.
+- Client cache for interaction-local state.
+
+Avoid duplicating equivalent payloads across these layers without invalidation ownership.
+
+## Render Pipeline Discipline
+
+Layout shifts and jank usually come from unpredictable geometry and synchronous layout reads after writes. Reserve space for async content and batch style mutations.
+
+```css
+.card-media {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  object-fit: cover;
+}
+```
+
+Aspect-ratio placeholders remove a major source of cumulative layout shift.
+
+## Bundle Governance
+
+Bundle size is not one number. Track initial critical path JS separately from deferred route chunks and editor-grade dependencies. Dynamic import heavy tools like Monaco, charting suites, and design-time utilities.
+
+## Observability In Production
+
+Lab results are necessary but insufficient. Capture RUM metrics for INP, LCP, and long-task distribution segmented by device class and geography.
+
+## Key Takeaways
+
+- Performance budgets must be defined before optimization starts.
+- CPU scheduling often matters more than raw network speed.
+- Cache layers need explicit ownership and invalidation strategy.
+- Reserve geometry to reduce layout instability.
+- Split critical path bundles from tool-heavy async chunks.
+- Monitor field metrics continuously and segment by user reality.

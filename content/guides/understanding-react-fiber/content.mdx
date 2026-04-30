@@ -1,0 +1,76 @@
+## Why Fiber Exists
+
+React's legacy stack reconciler treated render work as an all-or-nothing recursive walk. That model could block the main thread long enough to cause visible input lag on complex trees. Fiber reframes reconciliation as interruptible units of work so urgent updates can preempt non-urgent ones.
+
+## Core Data Model
+
+A Fiber node stores enough metadata to continue work later: pending props, memoized state, alternate pointers, and effect tags. The important architectural decision is duplicating trees with current and work-in-progress versions.
+
+```tsx
+interface FiberNode {
+  tag: number;
+  key: null | string;
+  type: unknown;
+  stateNode: unknown;
+  return: FiberNode | null;
+  child: FiberNode | null;
+  sibling: FiberNode | null;
+  alternate: FiberNode | null;
+  lanes: number;
+  childLanes: number;
+}
+```
+
+This structure enables resumable traversal without losing parent/sibling context.
+
+## Lanes And Priority Semantics
+
+Lanes are bitmasks representing priority classes of updates. Multiple updates can coexist and merge while preserving urgency ordering. This avoids the old single-priority queue problem where one expensive render could block unrelated urgent work.
+
+### Practical Heuristic
+
+- Input feedback and controlled fields should stay in urgent lanes.
+- Expensive list filtering or analytics-derived UI can be shifted to transition lanes.
+- Do not over-transition everything: starvation and user confusion are possible.
+
+## Render vs Commit: The Contract
+
+Render is speculative and interruptible; commit is synchronous and authoritative. If you mutate host environment during render, concurrent restarts can duplicate or invalidate that work.
+
+```tsx
+function Dashboard({ query }: { query: string }) {
+  const [isPending, startTransition] = useTransition();
+  const [value, setValue] = useState(query);
+
+  function onChange(next: string) {
+    setValue(next); // urgent
+    startTransition(() => {
+      // non-urgent recalculation path
+      expensiveSearch(next);
+    });
+  }
+
+  return <SearchInput value={value} pending={isPending} onChange={onChange} />;
+}
+```
+
+## Effect Timing Pitfalls
+
+`useLayoutEffect` runs in commit before paint and can block frame delivery. `useEffect` runs after paint and is safer for non-layout side effects. In concurrent rendering, stale closure behavior is amplified because renders can be restarted with newer inputs before commit.
+
+## Diagnosing Reconciliation Pathologies
+
+When a screen feels inconsistent under load, inspect:
+
+- Key stability across collections.
+- Suspense boundary placement and granularity.
+- Transition boundaries around CPU-heavy state derivations.
+- Memoization validity (dependency correctness over quantity).
+
+## Key Takeaways
+
+- Fiber models UI updates as resumable work units, not monolithic recursion.
+- Lanes encode update urgency and enable mixed-priority coexistence.
+- Render can restart; commit cannot be interrupted.
+- Side effects belong to commit-safe hooks, never render logic.
+- Stable keys and boundary placement dominate real-world reconciliation quality.

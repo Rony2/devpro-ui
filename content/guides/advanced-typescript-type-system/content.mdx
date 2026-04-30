@@ -1,0 +1,67 @@
+## Type-Level Design Goals
+
+Advanced TypeScript is primarily about API guarantees, not type cleverness. Strong systems encode invariants once and let the compiler enforce them at all call sites. The trade-off is readability, so every advanced abstraction must earn its complexity budget.
+
+## Conditional Types Beyond Basics
+
+Distributive conditionals are powerful but can surprise you when unions explode. Wrapping in tuples disables distribution and gives explicit control.
+
+```ts
+type Distribute<T> = T extends string ? { kind: "s"; v: T } : never;
+type NoDistribute<T> = [T] extends [string] ? { kind: "s"; v: T } : never;
+```
+
+Use this intentionally when designing generic helper types consumed by large unions.
+
+## Inference Steering With `infer`
+
+`infer` is most useful when decomposing nested function or tuple types that evolve across versions.
+
+```ts
+type LastArg<F> = F extends (...args: [...infer _, infer L]) => unknown ? L : never;
+
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
+```
+
+These helpers remove repetitive indexing and improve refactor resilience.
+
+## Variance And Callback Safety
+
+Function parameter variance is where many teams accidentally weaken correctness. If your callback accepts broader inputs than the producer emits, hidden runtime assumptions leak.
+
+```ts
+interface EventMap {
+  save: { id: string };
+  error: { message: string; fatal: boolean };
+}
+
+type Listener<K extends keyof EventMap> = (payload: EventMap[K]) => void;
+```
+
+Explicit event maps keep variance boundaries obvious and maintainable.
+
+## Branded Types For Domain Integrity
+
+Opaque branding prevents accidental interchange of structurally identical primitives.
+
+```ts
+type Brand<T, B extends string> = T & { readonly __brand: B };
+
+type UserId = Brand<string, "UserId">;
+type OrgId = Brand<string, "OrgId">;
+```
+
+This pattern eliminates class of bugs that unit tests often miss because values look the same at runtime.
+
+## Performance Of Type Checking
+
+Type-level recursion and deep conditional nesting can slow IDE feedback loops. Monitor compile-time regressions when introducing meta-types and prefer local, purpose-built helpers over universal mega-utility types.
+
+## Key Takeaways
+
+- Encode business invariants, not type puzzles.
+- Control distributive behavior deliberately with tuple wrapping.
+- Use `infer` to stabilize APIs against evolving signatures.
+- Be explicit about callback variance and payload contracts.
+- Brand critical IDs to prevent cross-domain mix-ups.
+- Track type-check performance as a first-class quality metric.

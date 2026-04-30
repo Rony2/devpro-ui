@@ -1,0 +1,10 @@
+{
+  "slug": "advanced-typescript-type-system",
+  "title": "Advanced TypeScript Type System Tactics",
+  "category": "TypeScript",
+  "difficulty": "hard",
+  "readingTimeMin": 16,
+  "lastUpdated": "2026-03-30",
+  "published": true,
+  "description": "Conditional types, variance, and inference control patterns for production-grade API design."
+}

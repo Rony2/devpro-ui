@@ -1,39 +1,56 @@
-import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/components/Header";
-import { Work_Sans } from "next/font/google"
-import Footer from "@/components/Footer/Footer";
+import { JetBrains_Mono, Space_Grotesk, Archivo_Black } from "next/font/google";
+import { StyleFlagProvider } from "@/components/shared/StyleFlagProvider";
 
+const bodyFont = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
+const displayFont = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display",
+  display: "swap",
+});
 
-const workSans = Work_Sans({
-  subsets: ['latin'],
-  variable: "--font-work-sans",
-  display: 'swap',
-})
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata = {
-  title: "JavaScript Job Interview Question & Preparation | Devpro",
-  description: "Ace your frontend job interviews with Devpro! Explore a comprehensive collection of JavaScript interview questions, coding interview strategies, and essential tips. Prepare effectively with curated resources designed to cover common interview topics and boost your chances of landing your next frontend developer role.",
+  title: "Devpro",
+  description:
+    "Advanced frontend engineering practice for senior, lead, and staff engineers.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
 };
+
+// Inline script that runs before paint — applies the stored theme class
+// so there is no flash of wrong theme on navigation or hard refresh.
+const themeScript = `(function(){
+  try {
+    var t = localStorage.getItem('theme');
+    if (t !== 'dark' && t !== 'light') {
+      t = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+    }
+    var d = document.documentElement;
+    d.classList.add(t);
+    d.classList.remove(t === 'dark' ? 'light' : 'dark');
+    d.style.colorScheme = t;
+  } catch(e) {}
+})()`;
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${workSans.variable} flex flex-col h-screen`}>
-        <Header />
-        <main className="flex-1 overflow-auto">{children}</main>
-        <Footer />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} min-h-screen bg-[var(--bg)] text-[var(--text)]`}>
+        <StyleFlagProvider>{children}</StyleFlagProvider>
       </body>
     </html>
   );
