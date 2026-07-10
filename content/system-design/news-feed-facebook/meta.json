@@ -1,0 +1,8 @@
+{
+  "slug": "news-feed-facebook",
+  "title": "News Feed (e.g. Facebook)",
+  "difficulty": "hard",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design a news feed with infinite scrolling, optimistic reactions, normalized state, real-time updates, and offline resilience — the canonical front-end system design problem."
+}

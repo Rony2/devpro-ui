@@ -1,0 +1,8 @@
+{
+  "slug": "photo-editor",
+  "title": "Photo/Image Editor (e.g. Canva, Photoshop Web)",
+  "difficulty": "expert",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design a browser-based image editor with canvas/WebGL rendering pipeline, non-destructive filter stack, layer compositing, undo history, and real-time collaboration."
+}

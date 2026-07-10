@@ -1,0 +1,8 @@
+{
+  "slug": "polling-system",
+  "title": "Real-Time Polling & Voting System",
+  "difficulty": "hard",
+  "estimatedMinutes": 40,
+  "published": true,
+  "description": "Design a real-time polling system with live vote counting, animated result transitions, anti-cheating mechanisms, and WebSocket-driven updates supporting millions of concurrent voters."
+}

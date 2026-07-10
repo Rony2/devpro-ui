@@ -1,0 +1,8 @@
+{
+  "slug": "calendar-app",
+  "title": "Calendar Application (e.g. Google Calendar)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a multi-view calendar with drag-to-create events, recurring event expansion, timezone handling, conflict detection, and cross-calendar sync with sub-second rendering."
+}

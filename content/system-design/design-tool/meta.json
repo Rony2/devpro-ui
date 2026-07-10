@@ -1,0 +1,8 @@
+{
+  "slug": "design-tool",
+  "title": "Design / Drawing Tool (e.g. Figma, Canva, Excalidraw)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Architect a browser-based vector design tool with a rendering pipeline, scene graph, spatial indexing for hit testing, affine transforms, and 60fps interaction for 1000+ objects."
+}

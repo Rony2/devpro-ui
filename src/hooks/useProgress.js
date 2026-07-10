@@ -30,5 +30,20 @@ export function useProgress() {
     setProgress(next);
   }
 
-  return { progress, markProblemComplete, setQuizScore, resetProblems };
+  function markSystemDesignComplete(slug) {
+    const next = {
+      ...progress,
+      systemDesign: { ...progress.systemDesign, [slug]: true },
+    };
+    setLocalProgress(next);
+    setProgress(next);
+  }
+
+  function resetSystemDesign() {
+    const next = { ...progress, systemDesign: {} };
+    setLocalProgress(next);
+    setProgress(next);
+  }
+
+  return { progress, markProblemComplete, setQuizScore, resetProblems, markSystemDesignComplete, resetSystemDesign };
 }

@@ -1,0 +1,8 @@
+{
+  "slug": "travel-booking",
+  "title": "Travel Booking (e.g. Airbnb)",
+  "difficulty": "medium",
+  "estimatedMinutes": 40,
+  "published": true,
+  "description": "Design a travel booking website like Airbnb and Expedia with search, filters, map integration, and booking flow."
+}

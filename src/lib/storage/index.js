@@ -5,12 +5,13 @@ function canUseStorage() {
 }
 
 export function getProgress() {
-  if (!canUseStorage()) return { problems: {}, quizzes: {} };
+  if (!canUseStorage()) return { problems: {}, quizzes: {}, systemDesign: {} };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { problems: {}, quizzes: {} };
+    const parsed = raw ? JSON.parse(raw) : {};
+    return { problems: {}, quizzes: {}, systemDesign: {}, ...parsed };
   } catch {
-    return { problems: {}, quizzes: {} };
+    return { problems: {}, quizzes: {}, systemDesign: {} };
   }
 }
 

@@ -1,0 +1,8 @@
+{
+  "slug": "video-streaming",
+  "title": "Video Streaming (e.g. Netflix)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a video streaming application like Netflix and YouTube with adaptive bitrate, playback controls, and content browsing."
+}

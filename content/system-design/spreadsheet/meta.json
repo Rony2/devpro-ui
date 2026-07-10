@@ -1,0 +1,8 @@
+{
+  "slug": "spreadsheet",
+  "title": "Spreadsheet Application (e.g. Google Sheets)",
+  "difficulty": "expert",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design a collaborative spreadsheet with cell-level formulas, dependency graph evaluation, virtualized grid rendering for millions of cells, and real-time multi-user editing."
+}

@@ -1,0 +1,8 @@
+{
+  "slug": "code-editor",
+  "title": "Code Editor / Web IDE (e.g. VS Code Web)",
+  "difficulty": "expert",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design a browser-based code editor with syntax highlighting via TextMate grammars, LSP integration, multi-file tabs, terminal emulation, and extension sandboxing for a full IDE experience."
+}

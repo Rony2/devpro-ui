@@ -1,0 +1,8 @@
+{
+  "slug": "music-streaming",
+  "title": "Music Streaming (e.g. Spotify)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a music streaming client with gapless playback, audio buffer management, offline downloads, crossfade transitions, and personalized playlist browsing at scale."
+}

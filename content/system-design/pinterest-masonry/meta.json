@@ -1,0 +1,8 @@
+{
+  "slug": "pinterest-masonry",
+  "title": "Design Pinterest's Masonry Feed",
+  "difficulty": "hard",
+  "estimatedMinutes": 40,
+  "published": true,
+  "description": "Architect Pinterest's homepage with masonry/waterfall layout algorithm, progressive image loading with BlurHash placeholders, virtualized infinite scroll for variable-height items, and responsive column calculation."
+}

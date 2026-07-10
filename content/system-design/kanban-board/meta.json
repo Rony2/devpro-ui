@@ -1,0 +1,8 @@
+{
+  "slug": "kanban-board",
+  "title": "Kanban Board (e.g. Trello, Jira Board)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a real-time kanban board with drag-and-drop card reordering, optimistic updates, WebSocket-driven multi-user collaboration, swimlanes, and cross-board automation rules."
+}

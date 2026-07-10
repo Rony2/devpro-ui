@@ -1,7 +1,11 @@
 import fs from "fs";
 import path from "path";
 import { cache } from "react";
-import { compileMdx } from "./mdx";
+import { compileMdx, extractHeadings } from "./mdx";
+import { Callout } from "@/components/shared/Callout";
+import { CodeBlock } from "@/components/shared/CodeBlock";
+
+const mdxComponents = { Callout, pre: CodeBlock };
 
 const SYSTEM_DIR = path.join(process.cwd(), "content/system-design");
 
@@ -30,7 +34,8 @@ export const getSystemDesignBySlug = cache(async (slug) => {
 
   const meta = readJson(path.join(dir, "meta.json"));
   const source = fs.readFileSync(path.join(dir, "content.mdx"), "utf-8");
-  const content = await compileMdx(source);
+  const content = await compileMdx(source, mdxComponents);
+  const headings = extractHeadings(source);
 
-  return { meta, content };
+  return { meta, content, headings };
 });

@@ -1,0 +1,8 @@
+{
+  "slug": "stories-reels",
+  "title": "Stories & Reels (e.g. Instagram, TikTok)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a full-screen vertical video feed with gesture-based navigation, pre-buffered video pipeline, creator tools overlay, and engagement interactions optimized for mobile-first consumption."
+}

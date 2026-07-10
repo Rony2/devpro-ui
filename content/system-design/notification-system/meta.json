@@ -1,0 +1,8 @@
+{
+  "slug": "notification-system",
+  "title": "Notification System (e.g. Facebook Notifications)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a cross-channel notification system with real-time delivery, read/unread state, notification grouping, preference management, and graceful degradation across push, in-app, and email channels."
+}

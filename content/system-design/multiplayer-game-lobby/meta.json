@@ -1,0 +1,8 @@
+{
+  "slug": "multiplayer-game-lobby",
+  "title": "Multiplayer Game Lobby & Matchmaking",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a multiplayer game lobby with real-time matchmaking, player presence, party system, WebSocket state synchronization, and latency-compensated countdown timers."
+}

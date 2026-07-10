@@ -1,0 +1,8 @@
+{
+  "slug": "form-builder",
+  "title": "Form Builder (e.g. Typeform, Google Forms)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a drag-and-drop form builder with conditional logic, multi-step flows, real-time validation, response analytics, and a renderer that executes form schemas client-side."
+}

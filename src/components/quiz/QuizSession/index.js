@@ -64,27 +64,31 @@ export function QuizSession({ slug, questions }) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="panel p-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <QuizProgress current={index + 1} total={questions.length} />
-          <label className="inline-flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={timerEnabled} onChange={(event) => setTimerEnabled(event.target.checked)} /> Timer
-          </label>
-          <QuizTimer enabled={timerEnabled} onTick={setElapsedSeconds} />
+    <div className="relative pb-20">
+      <div className="space-y-4">
+        <div className="panel p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <QuizProgress current={index + 1} total={questions.length} />
+            <label className="inline-flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={timerEnabled} onChange={(event) => setTimerEnabled(event.target.checked)} /> Timer
+            </label>
+            <QuizTimer enabled={timerEnabled} onTick={setElapsedSeconds} />
+          </div>
         </div>
+
+        <QuizQuestion question={question} selectedOptionId={selected} revealAnswer={revealAnswer} onSelect={(optionId) => setAnswers((state) => ({ ...state, [question.id]: optionId }))} />
       </div>
 
-      <QuizQuestion question={question} selectedOptionId={selected} revealAnswer={revealAnswer} onSelect={(optionId) => setAnswers((state) => ({ ...state, [question.id]: optionId }))} />
-
-      <button
-        type="button"
-        onClick={onConfirm}
-        disabled={!selected}
-        className="focus-ring min-h-[44px] border-2 border-[var(--border)] bg-[var(--brand)] px-4 text-sm font-bold font-[family-name:var(--font-display)] shadow-[4px_4px_0px_0px_var(--border)] transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_var(--border)] disabled:opacity-60"
-      >
-        {!revealAnswer ? "Confirm" : index < questions.length - 1 ? "Next Question" : "Finish Quiz"}
-      </button>
+      <div className="sticky bottom-0 z-10 -mx-4 mt-4 border-t-2 border-[var(--border)] bg-[var(--bg)] px-4 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:mt-4">
+        <button
+          type="button"
+          onClick={onConfirm}
+          disabled={!selected}
+          className="focus-ring min-h-[44px] border-2 border-[var(--border)] bg-[var(--brand)] px-4 text-sm font-bold font-[family-name:var(--font-display)] shadow-[4px_4px_0px_0px_var(--border)] transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_var(--border)] disabled:opacity-60"
+        >
+          {!revealAnswer ? "Confirm" : index < questions.length - 1 ? "Next Question" : "Finish Quiz"}
+        </button>
+      </div>
     </div>
   );
 }

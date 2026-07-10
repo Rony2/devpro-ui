@@ -1,0 +1,8 @@
+{
+  "slug": "chat-app",
+  "title": "Chat App (e.g. Messenger)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Architect a real-time chat system with WebSocket lifecycle management, optimistic message delivery, bidirectional virtualized scrolling, offline queueing with outbox pattern, and presence/typing indicator coordination."
+}
