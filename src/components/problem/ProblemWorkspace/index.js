@@ -352,6 +352,7 @@ export function ProblemWorkspace({
         isRunning={running}
         allPassed={allPassed}
         isCompleted={isCompleted}
+        progress={progress}
       />
     </div>
   );

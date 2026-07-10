@@ -1,0 +1,8 @@
+{
+  "slug": "analytics-dashboard",
+  "title": "Analytics Dashboard (e.g. Grafana, Datadog)",
+  "difficulty": "hard",
+  "estimatedMinutes": 50,
+  "published": true,
+  "description": "Design a real-time analytics dashboard with composable widget grid, time-series chart rendering, live data streaming via WebSocket, configurable alerting, and query builder interface."
+}

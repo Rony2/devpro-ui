@@ -2,7 +2,7 @@
   "slug": "design-a-component-library",
   "title": "Design a Component Library for a Design System",
   "difficulty": "expert",
-  "estimatedMinutes": 45,
+  "estimatedMinutes": 60,
   "published": true,
-  "description": "Architecture decisions, API design, packaging, and release workflow for a production UI component library."
+  "description": "Architect a production component library serving 50+ consumer teams: headless primitives, compound component APIs, theming engines, tree-shakeable packaging, accessibility-first design, and multi-version coexistence strategies."
 }

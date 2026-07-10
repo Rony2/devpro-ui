@@ -28,26 +28,26 @@
 
 /* ── Neo-brutalist dark theme ─────────────────────────────── */
 .dark {
-  --bg: #1a1a2e;
-  --bg-elevated: #242442;
-  --bg-surface: #1e1e38;
-  --bg-alt: #2e1a30;
-  --panel: #242442;
-  --text: #f0f0f0;
-  --text-muted: #a8a8b8;
-  --text-faint: #65657a;
-  --border: #f0f0f0;
-  --border-subtle: #3a3a55;
-  --brand: #ffea8e;
-  --brand-2: #fae583;
-  --danger: #ff6b6b;
-  --success: #69f0ae;
-  --code-bg: #0d0d1a;
-  --neo-pink: #ff9ed8;
-  --neo-blue: #7ec8e3;
-  --neo-yellow: #ffe066;
-  --neo-green: #7dff6b;
-  --neo-purple: #c49bff;
+  --bg: #0a0a0a;
+  --bg-elevated: #141414;
+  --bg-surface: #0f0f0f;
+  --bg-alt: #1a0a1a;
+  --panel: #141414;
+  --text: #ffffff;
+  --text-muted: #b0b0b0;
+  --text-faint: #666666;
+  --border: #ffffff;
+  --border-subtle: #2a2a2a;
+  --brand: #ffe600;
+  --brand-2: #ffd600;
+  --danger: #ff3b3b;
+  --success: #00e676;
+  --code-bg: #050505;
+  --neo-pink: #ff3d8f;
+  --neo-blue: #00d4ff;
+  --neo-yellow: #ffe600;
+  --neo-green: #39ff14;
+  --neo-purple: #bf5af2;
   color-scheme: dark;
 }
 
@@ -163,6 +163,18 @@ a {
   box-shadow: 6px 6px 0px 0px var(--border);
 }
 
+/* ── Mermaid Diagrams ──────────────────────────────────────── */
+.mermaid-diagram foreignObject {
+  overflow: visible;
+}
+.mermaid-diagram .label {
+  overflow: visible;
+}
+.mermaid-diagram .label div {
+  white-space: normal;
+  line-height: 1.4;
+}
+
 /* ── Monaco Editor chrome ─────────────────────────────────── */
 
 /* Thin scrollbar for sidebar */
@@ -224,13 +236,20 @@ a {
 }
 
 .mdx-body h2 {
-  @apply mt-8 text-xl font-semibold;
+  @apply mt-10 mb-4 text-xl font-bold inline-block;
   font-family: var(--font-display), sans-serif;
+  background: var(--neo-blue);
+  padding: 0.25rem 0.6rem;
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0px 0px var(--border);
+  color: #000;
 }
 
 .mdx-body h3 {
-  @apply mt-6 text-lg font-semibold;
+  @apply mt-8 mb-2 text-lg font-bold;
   font-family: var(--font-display), sans-serif;
+  padding-left: 0.75rem;
+  border-left: 4px solid var(--neo-pink);
 }
 
 .mdx-body p {
@@ -298,7 +317,8 @@ a {
 }
 
 .mdx-body a:hover {
-  background: var(--neo-yellow);
+  background: var(--neo-pink);
+  color: #000;
 }
 
 /* ── Collapsible Solution (details/summary) ─────────────────── */
@@ -334,14 +354,14 @@ a {
 }
 
 .mdx-body details summary:hover {
-  background: var(--neo-yellow);
+  background: var(--neo-pink);
   color: #000;
 }
 
 .mdx-body details[open] summary {
   color: #000;
   border-bottom: 2px solid var(--border);
-  background: var(--brand);
+  background: var(--neo-green);
 }
 
 .mdx-body details > .code-block-container {
@@ -350,6 +370,78 @@ a {
 
 .mdx-body details > .code-block-container {
   border-radius: 0;
+}
+
+/* ── Tables (system design content) ─────────────────────────── */
+.mdx-body > table,
+.mdx-body > div > table {
+  @apply mt-5 mb-2 w-full text-sm;
+  border-collapse: collapse;
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0px 0px var(--border);
+}
+
+.mdx-body > table th,
+.mdx-body > div > table th {
+  @apply px-3 py-2 text-left text-xs font-bold uppercase tracking-wider;
+  font-family: var(--font-display), sans-serif;
+  background: var(--neo-blue);
+  border: 2px solid var(--border);
+  color: #000;
+}
+
+.mdx-body > table td,
+.mdx-body > div > table td {
+  @apply px-3 py-2;
+  font-family: var(--font-body), sans-serif;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.mdx-body > table tr:nth-child(even) td,
+.mdx-body > div > table tr:nth-child(even) td {
+  background: var(--bg-surface);
+}
+
+/* ── Ordered lists ──────────────────────────────────────────── */
+.mdx-body ol {
+  @apply mt-3 list-decimal pl-6;
+  font-family: var(--font-body), sans-serif;
+  color: var(--text-muted);
+}
+
+/* ── Horizontal rules ───────────────────────────────────────── */
+.mdx-body hr {
+  @apply my-10;
+  border: none;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--neo-pink) 0px,
+    var(--neo-pink) 12px,
+    transparent 12px,
+    transparent 20px,
+    var(--neo-blue) 20px,
+    var(--neo-blue) 32px,
+    transparent 32px,
+    transparent 40px
+  );
+}
+
+/* ── Blockquotes ────────────────────────────────────────────── */
+.mdx-body blockquote {
+  @apply my-4 py-2 pl-4;
+  border-left: 5px solid var(--neo-purple);
+  background: color-mix(in srgb, var(--neo-purple) 12%, var(--bg-elevated));
+  border-top: 2px solid var(--border);
+  border-right: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+.mdx-body blockquote p {
+  @apply mt-0;
+  color: var(--text);
+  font-style: italic;
 }
 
 /* ── Landing page utilities ─────────────────────────────────── */

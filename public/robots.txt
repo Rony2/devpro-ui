@@ -1,4 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /vx7q3
+Disallow: /api/sc
 
-Sitemap: https://devpro.in/sitemap.xml
+Sitemap: https://www.devpro.in/sitemap.xml

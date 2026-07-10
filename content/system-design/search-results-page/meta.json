@@ -1,0 +1,8 @@
+{
+  "slug": "search-results-page",
+  "title": "Search Engine Results Page (e.g. Google Search)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a search results page with instant suggestions, federated result types (web, images, news, knowledge panels), progressive rendering, and sub-200ms perceived latency."
+}

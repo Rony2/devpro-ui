@@ -1,0 +1,8 @@
+{
+  "slug": "rich-text-editor",
+  "title": "Rich Text Editor",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a rich text editor component used on websites like Medium and Gmail with formatting, mentions, and collaborative editing."
+}

@@ -1,0 +1,8 @@
+{
+  "slug": "google-maps",
+  "title": "Google Maps — Interactive Map Application",
+  "difficulty": "expert",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design an interactive maps application with tile-based rendering, geospatial search, route visualization, marker clustering, and offline map caching for millions of concurrent users."
+}

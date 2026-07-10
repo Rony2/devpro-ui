@@ -266,13 +266,24 @@ content/system-design/[slug]/
 
 ### `content.mdx` structure
 
-1. `## Problem Statement` — what you're asked to design
-2. `## Clarifying Questions` — what a good candidate asks
-3. `## Core Requirements` — functional + non-functional
-4. `## High-Level Architecture` — diagram description or ASCII art
-5. `## Deep Dives` — 2–3 sub-sections on the hardest parts
-6. `## Trade-offs` — what you're accepting and why
-7. `## What Great Looks Like` — what separates a staff answer from a senior answer
+> **Full depth requirements are defined in `.instructions/SYSTEM_DESIGN_TEMPLATE.md`.**
+> Every system design entry MUST follow that template. The summary below is an overview — refer to the template for mandatory sections, depth bars, and style rules.
+
+1. `## Problem Statement` — what and why, with real-world examples
+2. `## Requirements Exploration` — FR list + NFR table with numeric targets
+3. `## Capacity Estimation & Constraints` — numbers that drive architecture decisions
+4. `## Architecture / High-Level Design` — rendering strategy, navigation model, component tree, state management
+5. `## Data Model / Entities` — full TypeScript types with field-level comments
+6. `## Interface Definition (API)` — endpoints/contracts with request/response shapes
+7. `## Caching Strategy` — multi-layer (memory, Service Worker/disk, CDN) with eviction and coherence
+8. `## Rendering & Performance Deep Dive` — CWV targets, critical path timeline, virtualization, bundle tiers
+9. `## Security Deep Dive` — threat model table, CSP, auth strategy, specific mitigations with code
+10. `## Scalability & Reliability` — failure modes table with detection and recovery
+11. `## Accessibility Deep Dive` — semantic HTML, keyboard nav table, ARIA live regions
+12. `## Monitoring & Observability` — metrics dashboard with alert thresholds
+13. `## Trade-offs` — decision matrix (pro/con table, 6–10 entries)
+14. `## What Great Looks Like` — senior / staff / principal tiers
+15. `## Key Takeaways` — 6–8 bullet points
 
 ---
 

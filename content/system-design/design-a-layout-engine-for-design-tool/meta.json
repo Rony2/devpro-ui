@@ -1,0 +1,8 @@
+{
+  "slug": "design-a-layout-engine-for-design-tool",
+  "title": "Design a Layout Engine for a Design Tool (e.g. Figma)",
+  "difficulty": "expert",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Architect a constraint-based layout engine for a design tool supporting auto-layout, responsive constraints, flexbox semantics, and real-time collaborative editing with sub-16ms layout resolution."
+}

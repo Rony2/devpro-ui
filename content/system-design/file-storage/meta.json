@@ -1,0 +1,8 @@
+{
+  "slug": "file-storage",
+  "title": "File Storage & Sync (e.g. Google Drive, Dropbox)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a cloud file storage client with chunked uploads, delta sync, conflict resolution, real-time collaboration indicators, and offline file access with quota management."
+}

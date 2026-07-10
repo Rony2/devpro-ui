@@ -1,0 +1,8 @@
+{
+  "slug": "e-commerce-marketplace",
+  "title": "E-commerce Marketplace (e.g. Amazon)",
+  "difficulty": "medium",
+  "estimatedMinutes": 40,
+  "published": true,
+  "description": "Design the front-end architecture for an e-commerce marketplace — hybrid rendering for SEO, cart state management across tabs/sessions, checkout form resilience, and performance under flash-sale traffic spikes."
+}

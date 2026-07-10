@@ -16,7 +16,6 @@ import {
   ListFilter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useProgress } from "@/hooks/useProgress";
 
 /* ── Topic group pills for the sidebar ─────────────────────── */
 const TOPIC_GROUPS = [
@@ -42,7 +41,7 @@ function getStoredTab() {
   try { return localStorage.getItem("devpro:problems-tab") || "grind-75"; } catch { return "grind-75"; }
 }
 
-function ProblemDrawer({ open, onClose, allProblems, currentSlug }) {
+function ProblemDrawer({ open, onClose, allProblems, currentSlug, progress }) {
   const [category, setCategoryRaw] = useState(getStoredTab);
   const setCategory = useCallback((tab) => {
     setCategoryRaw(tab);
@@ -51,7 +50,6 @@ function ProblemDrawer({ open, onClose, allProblems, currentSlug }) {
   const [search, setSearch] = useState("");
   const [topicGroup, setTopicGroup] = useState("all");
   const [showCatDropdown, setShowCatDropdown] = useState(false);
-  const { progress } = useProgress();
   const drawerRef = useRef(null);
   const activeRef = useRef(null);
 
@@ -287,6 +285,7 @@ export function ProblemBottomBar({
   isRunning,
   allPassed,
   isCompleted,
+  progress,
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -299,10 +298,11 @@ export function ProblemBottomBar({
         onClose={closeDrawer}
         allProblems={allProblems}
         currentSlug={currentSlug}
+        progress={progress}
       />
-      <div className="flex h-12 items-center justify-between border-t-2 border-[var(--border)] bg-[var(--bg-elevated)] px-4">
-        {/* ── Left: language selector ────────────────────── */}
-        <div className="flex items-center gap-2">
+      <div className="flex h-12 items-center justify-between border-t-2 border-[var(--border)] bg-[var(--bg-elevated)] px-2 sm:px-4">
+        {/* ── Left: language selector (hidden on small mobile) ── */}
+        <div className="hidden items-center gap-2 sm:flex">
           <Settings size={14} className="text-[var(--text-muted)]" />
           <select
             value={language}
@@ -334,7 +334,8 @@ export function ProblemBottomBar({
             onClick={() => setDrawerOpen(true)}
             className="focus-ring mx-1 inline-flex items-center gap-1 border-2 border-[var(--border)] px-2.5 py-1 text-xs font-bold text-[var(--text-muted)] transition-colors hover:text-[var(--text)] hover:bg-[var(--neo-yellow)]"
           >
-            All problems
+            <span className="hidden sm:inline">All problems</span>
+            <span className="sm:hidden">List</span>
             <span className="text-[10px] opacity-60">
               ({currentIndex + 1}/{totalCount})
             </span>
@@ -356,12 +357,12 @@ export function ProblemBottomBar({
         </div>
 
         {/* ── Right: actions ───────────────────────────────────── */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={onMarkComplete}
             className={cn(
-              "focus-ring inline-flex h-8 items-center gap-1.5 border-2 border-[var(--border)] px-2.5 text-xs font-bold transition-colors",
+              "focus-ring hidden h-8 items-center gap-1.5 border-2 border-[var(--border)] px-2.5 text-xs font-bold transition-colors sm:inline-flex",
               isCompleted
                 ? "bg-[var(--neo-green)] text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--neo-yellow)]",
@@ -375,7 +376,7 @@ export function ProblemBottomBar({
             type="button"
             onClick={onRun}
             disabled={isRunning}
-            className="focus-ring inline-flex h-8 items-center gap-1.5 border-2 border-[var(--border)] bg-[var(--brand)] px-3 text-xs font-bold shadow-[2px_2px_0px_0px_var(--border)] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_var(--border)] disabled:opacity-60"
+            className="focus-ring inline-flex min-h-[36px] items-center gap-1.5 border-2 border-[var(--border)] bg-[var(--brand)] px-3 text-xs font-bold shadow-[2px_2px_0px_0px_var(--border)] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_var(--border)] disabled:opacity-60"
           >
             {isRunning ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />}
             Run
@@ -385,7 +386,7 @@ export function ProblemBottomBar({
             type="button"
             onClick={onSubmit}
             className={cn(
-              "focus-ring inline-flex h-8 items-center gap-1.5 border-2 border-[var(--border)] px-3 text-xs font-bold transition-all",
+              "focus-ring inline-flex min-h-[36px] items-center gap-1.5 border-2 border-[var(--border)] px-3 text-xs font-bold transition-all",
               allPassed
                 ? "bg-[var(--neo-green)] text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_var(--border)]"
                 : "text-[var(--text)] hover:bg-[var(--neo-yellow)]",

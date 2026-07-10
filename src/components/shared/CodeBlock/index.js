@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Copy, Check, ClipboardPaste } from "lucide-react";
 import { Highlight, themes } from "prism-react-renderer";
 import { useEditorContext } from "@/components/problem/EditorContext";
+import { MermaidDiagram } from "@/components/shared/MermaidDiagram";
 
 export function CodeBlock({ children, ...props }) {
   const [copied, setCopied] = useState(false);
@@ -23,6 +24,11 @@ export function CodeBlock({ children, ...props }) {
 
   const className = codeElement?.props?.className ?? "";
   const language = className.replace(/language-/, "") || "javascript";
+
+  // Render Mermaid diagrams
+  if (language === "mermaid") {
+    return <MermaidDiagram chart={codeString} />;
+  }
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(codeString).then(() => {
@@ -96,8 +102,8 @@ export function CodeBlock({ children, ...props }) {
           )}
         </Highlight>
       ) : (
-        <pre className="m-0 overflow-x-auto border-0 bg-transparent p-4 text-[13px] leading-[1.7] text-[color:var(--text-muted)]" style={{ fontFamily: "var(--font-mono), monospace" }}>
-          {codeString}
+        <pre suppressHydrationWarning className="m-0 overflow-x-auto border-0 bg-transparent p-4 text-[13px] leading-[1.7] text-[color:var(--text-muted)]" style={{ fontFamily: "var(--font-mono), monospace" }}>
+          <code dangerouslySetInnerHTML={{ __html: codeString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }} />
         </pre>
       )}
     </div>

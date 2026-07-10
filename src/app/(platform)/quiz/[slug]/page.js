@@ -34,7 +34,6 @@ function getQuestionDataBySlug(slug) {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const siteUrl = `https://devpro.in/quiz/${slug}`;
   const questionData = getQuestionDataBySlug(slug);
 
   if (!questionData) {
@@ -45,16 +44,16 @@ export async function generateMetadata({ params }) {
     title: questionData.title,
     description: questionData.description,
     openGraph: {
-      title: questionData.title,
+      title: `${questionData.title} | Devpro`,
       description: questionData.description || 'No description available.',
-      url: siteUrl,
+      url: `/quiz/${slug}`,
       type: 'article',
-      images: [{ url: '/seo-icon.svg', width: 1200, height: 630, alt: `${questionData.title}` }],
+      images: [{ url: '/seo-icon.svg', width: 1200, height: 630, alt: questionData.title }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: questionData.title,
-      description: questionData.description || 'Front End Developer Interview Preparation',
+      title: `${questionData.title} | Devpro`,
+      description: questionData.description || 'Frontend interview preparation for senior engineers.',
       images: ['/seo-icon.svg'],
     },
   };

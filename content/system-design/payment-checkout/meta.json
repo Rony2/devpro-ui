@@ -1,0 +1,8 @@
+{
+  "slug": "payment-checkout",
+  "title": "Payment Checkout Flow (e.g. Stripe, Shopify)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a multi-step payment checkout with PCI-compliant card tokenization, fraud detection signals, cart reservation, retry-safe idempotent submissions, and A/B-testable conversion optimization."
+}

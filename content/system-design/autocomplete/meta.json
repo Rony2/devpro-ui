@@ -1,0 +1,8 @@
+{
+  "slug": "autocomplete",
+  "title": "Autocomplete / Typeahead Search",
+  "difficulty": "medium",
+  "estimatedMinutes": 35,
+  "published": true,
+  "description": "Architect a production autocomplete system with multi-layer caching, adaptive debouncing, request cancellation, ARIA combobox accessibility, and graceful degradation under network failure."
+}

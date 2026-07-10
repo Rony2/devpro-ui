@@ -1,0 +1,8 @@
+{
+  "slug": "google-docs",
+  "title": "Design a Collaborative Document Editor (Google Docs)",
+  "difficulty": "hard",
+  "estimatedMinutes": 45,
+  "published": true,
+  "description": "Design a full collaborative document editor like Google Docs: block-based document model, formatting toolbar, comments/suggestions, version history, sharing permissions, and large-document performance."
+}

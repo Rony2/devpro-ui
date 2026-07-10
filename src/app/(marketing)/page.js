@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   BrainCircuit,
   Bug,
   Code2,
@@ -12,14 +11,15 @@ import {
   Target,
   Zap,
 } from "lucide-react";
+import { PageViewCounter } from "@/components/shared/PageViewCounter";
 
 const COMPANY_NAMES = ["Stripe", "Vercel", "Google", "Meta", "Shopify"];
 
 const STATS = [
-  { value: "5+", label: "Coding Problems" },
-  { value: "2", label: "Quiz Packs" },
-  { value: "3", label: "Deep Guides" },
-  { value: "2", label: "System Design" },
+  { value: "103", label: "DSA (Grind 75)" },
+  { value: "101", label: "JS Problems" },
+  { value: "193", label: "Quiz Questions" },
+  { value: "30", label: "System Design" },
 ];
 
 const FEATURES = [
@@ -31,7 +31,7 @@ const FEATURES = [
     title: "Coding Problems",
     description:
       "Implementation and debugging rounds with visible I/O examples and hidden edge-case test suites. Pass all to move on.",
-    meta: "5+ problems · Easy / Medium / Hard",
+    meta: "103 DSA + 101 JS · Easy / Medium / Hard",
   },
   {
     icon: BrainCircuit,
@@ -41,17 +41,7 @@ const FEATURES = [
     title: "Internals Quizzes",
     description:
       "MCQ and spot-the-bug questions that test event loop ordering, reconciler phases, and scheduler priority — with deep explanations.",
-    meta: "2 quizzes · MCQ / Spot-the-bug",
-  },
-  {
-    icon: BookOpen,
-    iconBg: "bg-[var(--neo-blue)]",
-    iconColor: "text-[var(--text)]",
-    href: "/guides",
-    title: "Deep-Dive Guides",
-    description:
-      "Long-form architecture and performance reference on React Fiber, TypeScript type system internals, and the browser rendering pipeline.",
-    meta: "3 guides · Long-form",
+    meta: "193 questions · MCQ / Spot-the-bug",
   },
   {
     icon: Layers,
@@ -61,7 +51,7 @@ const FEATURES = [
     title: "System Design",
     description:
       "Architecture drills: design a component library, spec a real-time collaboration editor, plan a design system API from scratch.",
-    meta: "2 scenarios · Frontend Architecture",
+    meta: "30 scenarios · Frontend Architecture",
   },
 ];
 
@@ -136,10 +126,10 @@ export default function LandingPage() {
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
               <Link
-                href="/guides"
+                href="/system-design"
                 className="btn-land-secondary focus-ring inline-flex min-h-[46px] items-center rounded-xl px-5 font-semibold"
               >
-                Browse Guides
+                System Design
               </Link>
             </div>
 
@@ -249,6 +239,7 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+        <PageViewCounter />
       </section>
 
       {/* ── Feature cards ─────────────────────────────────────────── */}

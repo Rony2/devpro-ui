@@ -1,23 +1,39 @@
-import Link from "next/link";
 import { getAllSystemDesign } from "@/lib/content/systemDesign";
+import { SystemDesignListClient } from "@/components/system-design/SystemDesignListClient";
+
+export const dynamic = "force-static";
+
+export const metadata = {
+  title: "Frontend System Design",
+  description:
+    "Master frontend system design with in-depth scenarios covering architecture, rendering, state management, performance, and scalability for senior and staff engineers.",
+  openGraph: {
+    title: "Frontend System Design | Devpro",
+    description:
+      "Master frontend system design with in-depth scenarios covering architecture, rendering, state management, performance, and scalability.",
+    url: "/system-design",
+    type: "website",
+    images: [{ url: "/seo-icon.svg", width: 1200, height: 630, alt: "Devpro System Design" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Frontend System Design | Devpro",
+    description:
+      "Master frontend system design for senior and staff engineer interviews.",
+    images: ["/seo-icon.svg"],
+  },
+};
 
 export default function SystemDesignPage() {
   const scenarios = getAllSystemDesign();
 
-  return (
-    <section className="container-page mt-6 pb-14 space-y-4">
-      <h1 className="text-3xl font-bold font-[family-name:var(--font-display)]">System Design</h1>
-      <p className="text-sm font-bold text-[var(--text-muted)]">Frontend system design scenarios with staff-level answer frameworks.</p>
+  const totalHours = Math.round(
+    scenarios.reduce((sum, s) => sum + (s.estimatedMinutes || 0), 0) / 60,
+  );
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {scenarios.map((scenario) => (
-          <Link key={scenario.slug} href={`/system-design/${scenario.slug}`} className="card focus-ring block p-4">
-            <h2 className="text-lg font-bold font-[family-name:var(--font-display)]">{scenario.title}</h2>
-            <p className="mt-2 text-sm text-[var(--text-muted)]">{scenario.description}</p>
-            <p className="mt-3 text-xs uppercase tracking-wide font-bold text-[var(--text-muted)]">{scenario.difficulty} · {scenario.estimatedMinutes} min</p>
-          </Link>
-        ))}
-      </div>
-    </section>
+  return (
+    <div className="container-page mt-6 pb-14">
+      <SystemDesignListClient scenarios={scenarios} totalHours={totalHours} />
+    </div>
   );
 }

@@ -1,0 +1,8 @@
+{
+  "slug": "email-client",
+  "title": "Email Client (e.g. Microsoft Outlook)",
+  "difficulty": "hard",
+  "estimatedMinutes": 60,
+  "published": true,
+  "description": "Design an offline-first desktop email client with multi-account IMAP sync, sandboxed HTML rendering, full-text search, and outbox resilience."
+}

@@ -2,7 +2,7 @@
   "slug": "design-a-realtime-collaboration-editor",
   "title": "Design a Realtime Collaboration Editor",
   "difficulty": "expert",
-  "estimatedMinutes": 50,
+  "estimatedMinutes": 60,
   "published": true,
-  "description": "Design conflict resolution, presence, persistence, and scaling strategy for a multi-user collaborative text editor."
+  "description": "Architect the conflict resolution pipeline, presence system, and document model for a real-time collaborative editor supporting 100+ concurrent users with sub-200ms operation visibility."
 }

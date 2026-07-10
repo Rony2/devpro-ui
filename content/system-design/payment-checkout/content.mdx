@@ -1,0 +1,1061 @@
+## Problem Statement
+
+A payment checkout flow is the single highest-value interaction surface in any commercial application. Stripe processes over 1 billion API requests per day. Amazon's 1-Click patent generated an estimated $2.4B in annual revenue through friction reduction alone. Shopify's checkout handles $444B in cumulative GMV. The front-end architecture of checkout is uniquely constrained: it must satisfy PCI DSS compliance, handle asynchronous payment processor responses, prevent double-charges through idempotency, and maintain conversion rates above 70% — all while rendering across dozens of payment method permutations.
+
+Checkout differs from typical form-heavy UIs in three fundamental ways:
+
+1. **Regulatory isolation** — PCI DSS SAQ-A compliance mandates that raw card numbers never touch your DOM. Card input must be rendered in cross-origin iframes controlled by the payment processor (Stripe Elements, Adyen Drop-in, Braintree Hosted Fields). Your JavaScript cannot read, intercept, or log these values.
+2. **Asynchronous multi-party orchestration** — a single "Pay Now" click may trigger tokenization → fraud check → 3D Secure challenge → authorization → capture across 3-5 separate services with different latency profiles (50ms to 45 seconds for 3DS).
+3. **Irrecoverable failure cost** — a double-charge or lost order is not a UX bug; it's a financial liability. Every state transition must be idempotent, and the UI must never allow resubmission of an in-flight payment.
+
+**Scope:** Front-end architecture for a multi-step checkout flow covering cart summary, address collection, shipping method selection, payment method orchestration, order review, and post-payment confirmation/error handling. Inventory reservation, price calculation, and fraud signal collection are in scope. Payment processor backend integration is out of scope (treated as an API contract).
+
+**Real-world references:** Stripe Checkout (hosted fields, Payment Intents API), Shopify Checkout (multi-step with Shop Pay acceleration), Amazon (1-Click, address book, payment method vault), Adyen Drop-in (adaptive payment methods), Square Web Payments SDK (tokenization + Apple Pay).
+
+---
+
+## Requirements Exploration
+
+### Functional Requirements
+
+1. Users progress through a multi-step checkout: cart review → shipping address → shipping method → payment → order review → confirmation.
+2. Card payment input is rendered in PCI-compliant isolated iframes (hosted fields pattern) — the merchant frontend never handles raw PANs.
+3. System supports 8+ payment methods: credit/debit card, Apple Pay, Google Pay, PayPal, Klarna/Afterpay (BNPL), ACH bank transfer, bank redirects (iDEAL, Sofort), and cryptocurrency.
+4. Order submission is idempotent — clicking "Place Order" multiple times with the same idempotency key produces exactly one charge.
+5. 3D Secure / Strong Customer Authentication (SCA) challenges render inline or redirect and recover state on return.
+6. Inventory is reserved with a TTL-based hold (10-minute window) upon entering checkout; released on abandonment or expiry.
+7. Address input provides autocomplete via Google Places API with structured field parsing (street, city, state, zip, country).
+8. Price calculation updates in real-time as address/shipping/discount inputs change (subtotal, tax, shipping, discounts, total).
+9. Apple Pay / Google Pay integrate via the Web Payment Request API with merchant validation and shipping address callbacks.
+10. Guest checkout is supported without account creation; email capture happens at step 1 for abandoned cart recovery.
+11. Checkout state persists across page refreshes, tab closures, and 3DS redirects via server-side session + localStorage fallback.
+12. Post-payment failures (declined, timeout, processor error) display actionable recovery UI with retry or alternative payment method suggestion.
+
+### Non-Functional Requirements
+
+| Category      | Requirement                                    | Target                            |
+| ------------- | ---------------------------------------------- | --------------------------------- |
+| Performance   | Time to Interactive (checkout page)            | < 2.5s on 4G mid-range device     |
+| Performance   | Payment form render (hosted fields ready)      | < 1.5s after page load            |
+| Performance   | "Place Order" to confirmation                  | < 3s (excluding 3DS)              |
+| Reliability   | Double-charge prevention                       | 0 incidents (idempotency)         |
+| Reliability   | Order completion rate (no drop during payment) | > 99.5% of initiated payments     |
+| Security      | PCI DSS compliance level                       | SAQ-A (no card data in scope)     |
+| Security      | 3DS challenge completion rate                  | > 85% (minimize friction)         |
+| Conversion    | Checkout completion rate                       | > 68% (industry avg: 30%)         |
+| Conversion    | Guest checkout availability                    | 100% of flows (no forced signup)  |
+| Availability  | Checkout uptime                                | 99.99% (52 min/year max downtime) |
+| Accessibility | WCAG compliance                                | AA (2.1) across all steps         |
+| Mobile        | Mobile conversion parity                       | Within 5% of desktop rate         |
+
+---
+
+## Capacity Estimation & Constraints
+
+| Dimension                     | Estimate                                                     | Architecture Implication                                 |
+| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------------- |
+| Peak checkout initiations     | 50,000/min during flash sales                                | Edge-cached static assets; API rate limiting per session |
+| Payment method API calls      | 3-5 per checkout (tokenize, create intent, confirm, capture) | Request waterfall optimization; parallel where possible  |
+| 3DS redirect rate             | 15-30% of EU card transactions                               | State must survive full page redirect and return         |
+| Cart payload size             | 2-8KB (20 items max with variants, images, metadata)         | Fits in single API response; no pagination needed        |
+| Address autocomplete RPS      | 2,000 queries/sec (debounced at 300ms)                       | Client-side debounce + session token for billing         |
+| Hosted field iframe count     | 3-4 per page (card number, expiry, CVC, postal)              | Iframe boot time dominates payment form TTI              |
+| Inventory check latency       | < 100ms p99                                                  | Cannot block render; async validation with UI feedback   |
+| Tax calculation latency       | 200-500ms (TaxJar/Avalara API)                               | Show skeleton → fill; cache by address+items hash        |
+| Session storage per checkout  | 4-12KB (cart, addresses, selections, idempotency keys)       | Fits in encrypted cookie or server session               |
+| Concurrent checkouts per user | 1 (enforce single active checkout per session)               | Prevents inventory over-reservation                      |
+
+---
+
+## Architecture / High-Level Design
+
+### Rendering Strategy
+
+Checkout uses **client-side rendering (CSR) with server-prefetched data** — not SSR. Rationale:
+
+1. Checkout pages are never indexed by search engines (noindex, nofollow).
+2. The page is behind a cart-not-empty guard — no cold-start SEO concern.
+3. Payment iframes require DOM-level JavaScript interaction that SSR cannot hydrate reliably.
+4. Sensitive session state (payment intents, idempotency keys) must not leak into HTML source.
+
+The checkout shell (header, progress indicator, footer) renders instantly from cached JS. Step-specific content streams in via API calls initiated during shell render.
+
+### Navigation Model
+
+Multi-step checkout uses a **linear wizard pattern with URL-synced steps**:
+
+```
+/checkout            → redirects to /checkout/information
+/checkout/information → email + shipping address
+/checkout/shipping    → shipping method selection
+/checkout/payment     → payment method + billing
+/checkout/review      → order summary + place order
+/checkout/confirmation/[orderId] → post-purchase
+```
+
+Navigation rules:
+
+- Forward: only when current step validates (client + server validation)
+- Backward: always allowed, preserves entered data
+- Direct URL access: redirects to latest valid step (prevents skipping)
+- Browser back button: works naturally via History API
+- 3DS redirect return: deep-links to `/checkout/payment?payment_intent=pi_xxx&redirect_status=succeeded`
+
+### System Architecture Diagram ASCII
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           BROWSER                                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────┐  ┌──────────────────┐  ┌───────────────────────────┐  │
+│  │ Checkout App │  │ Hosted Fields    │  │ Apple Pay / Google Pay    │  │
+│  │ (Your Code)  │  │ (Stripe iframe)  │  │ (Payment Request API)    │  │
+│  │              │  │                  │  │                           │  │
+│  │ - Steps UI   │◄─┤ - Card Number    │  │ - canMakePayment()       │  │
+│  │ - State Mgmt │  │ - Expiry         │  │ - show() → token         │  │
+│  │ - Validation │  │ - CVC            │  │ - onshippingaddresschange │  │
+│  │ - API calls  │  │ - PostalCode     │  │                           │  │
+│  └──────┬───────┘  └────────┬─────────┘  └─────────────┬─────────────┘  │
+│         │                    │                           │                │
+│         │    postMessage     │      Payment Token        │                │
+│         │◄───────────────────┘                           │                │
+│         │◄───────────────────────────────────────────────┘                │
+│         │                                                                 │
+└─────────┼─────────────────────────────────────────────────────────────────┘
+          │ HTTPS (fetch)
+          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        YOUR API (BFF)                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌─────────────┐  ┌──────────────┐  ┌────────────┐  ┌───────────────┐  │
+│  │ Checkout    │  │ Inventory    │  │ Price      │  │ Fraud Signal  │  │
+│  │ Session API │  │ Reservation  │  │ Calculator │  │ Collector     │  │
+│  └──────┬──────┘  └──────┬───────┘  └─────┬──────┘  └───────┬───────┘  │
+│         │                 │                 │                  │          │
+└─────────┼─────────────────┼─────────────────┼──────────────────┼──────────┘
+          │                 │                 │                  │
+          ▼                 ▼                 ▼                  ▼
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐
+│ Stripe /     │  │ Inventory    │  │ TaxJar /     │  │ Device Fingerprint│
+│ Adyen /      │  │ Service      │  │ Avalara      │  │ (Fingerprint.js) │
+│ Payment PSP  │  │ (Redis TTL)  │  │ Tax Engine   │  │                  │
+└──────────────┘  └──────────────┘  └──────────────┘  └──────────────────┘
+```
+
+### Component Architecture
+
+```
+CheckoutLayout (server component — shell only)
+├── CheckoutProgress (client — step indicator)
+├── CheckoutRouter (client — step management)
+│   ├── InformationStep
+│   │   ├── EmailInput
+│   │   ├── AddressForm
+│   │   │   ├── AddressAutocomplete (Google Places)
+│   │   │   └── AddressFields (street, city, state, zip, country)
+│   │   └── SavedAddressPicker
+│   ├── ShippingStep
+│   │   ├── ShippingMethodList
+│   │   └── DeliveryEstimate
+│   ├── PaymentStep
+│   │   ├── PaymentMethodSelector
+│   │   ├── CardPaymentForm
+│   │   │   ├── HostedCardNumber (iframe)
+│   │   │   ├── HostedExpiry (iframe)
+│   │   │   ├── HostedCVC (iframe)
+│   │   │   └── BillingAddressToggle
+│   │   ├── WalletPaymentButton (Apple Pay / Google Pay)
+│   │   ├── BNPLOption (Klarna / Afterpay)
+│   │   ├── PayPalButton (PayPal JS SDK)
+│   │   └── BankRedirectOption (iDEAL, Sofort)
+│   ├── ReviewStep
+│   │   ├── OrderSummary
+│   │   ├── PriceBreakdown
+│   │   └── PlaceOrderButton (idempotent)
+│   └── ConfirmationStep
+│       ├── OrderConfirmation
+│       └── PostPurchaseUpsell
+├── CartSummary (client — sticky sidebar)
+│   ├── CartItemList
+│   ├── DiscountCodeInput
+│   └── PriceTotals
+└── CheckoutErrorBoundary
+```
+
+### State Management Strategy
+
+| State Category                               | Storage                                        | Rationale                                                |
+| -------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| Checkout session (cart, addresses, shipping) | Server session (Redis) + Zustand client mirror | Survives 3DS redirects; single source of truth on server |
+| Payment intent / idempotency key             | Server-only (never exposed to client JS)       | PCI compliance; prevents client-side tampering           |
+| Form field values (in-progress)              | Zustand store + localStorage backup            | Survives refresh; immediate UI responsiveness            |
+| Step validation state                        | Zustand (derived)                              | Computed from form state; no persistence needed          |
+| Hosted field readiness                       | Zustand (event-driven from postMessage)        | Tracks iframe load/error/focus states                    |
+| Price calculation result                     | React Query (server state)                     | Cached by address+items+discount hash; auto-invalidates  |
+| Inventory reservation status                 | React Query with polling (30s)                 | Warns user before TTL expires                            |
+| 3DS challenge state                          | URL params + server session                    | Must survive full page redirect                          |
+
+---
+
+## Data Model / Entities
+
+```typescript
+interface CheckoutSession {
+  id: string; // UUID, server-generated
+  cartId: string; // Reference to cart entity
+  status: CheckoutStatus;
+  email: string | null;
+  shippingAddress: Address | null;
+  billingAddress: Address | null;
+  shippingMethod: ShippingMethod | null;
+  paymentMethodType: PaymentMethodType | null;
+  paymentIntentId: string | null; // Stripe PI / Adyen ref
+  idempotencyKey: string; // Generated once per checkout attempt
+  inventoryReservationId: string | null;
+  reservationExpiresAt: string | null; // ISO 8601
+  discountCodes: string[];
+  pricing: PriceCalculation | null;
+  fraudSignals: FraudSignals;
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string; // Entire session TTL (30 min)
+}
+
+type CheckoutStatus =
+  | "information"
+  | "shipping"
+  | "payment"
+  | "review"
+  | "processing"
+  | "requires_action" // 3DS challenge pending
+  | "completed"
+  | "failed"
+  | "abandoned";
+
+interface Address {
+  firstName: string;
+  lastName: string;
+  line1: string;
+  line2: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string; // ISO 3166-1 alpha-2
+  phone: string | null;
+  placeId: string | null; // Google Places reference
+  validated: boolean; // Server-validated via USPS/Royal Mail
+}
+
+interface ShippingMethod {
+  id: string;
+  carrier: string;
+  name: string; // "Standard", "Express", "Next Day"
+  estimatedDays: { min: number; max: number };
+  price: MoneyAmount;
+  cutoffTime: string | null; // ISO 8601 time for same-day dispatch
+}
+
+type PaymentMethodType =
+  | "card"
+  | "apple_pay"
+  | "google_pay"
+  | "paypal"
+  | "klarna"
+  | "afterpay"
+  | "ach_debit"
+  | "ideal"
+  | "sofort"
+  | "crypto";
+
+interface PriceCalculation {
+  subtotal: MoneyAmount;
+  shippingCost: MoneyAmount;
+  taxAmount: MoneyAmount;
+  discountAmount: MoneyAmount;
+  total: MoneyAmount;
+  taxBreakdown: TaxLineItem[];
+  discountBreakdown: DiscountLineItem[];
+  currency: string; // ISO 4217
+}
+
+interface MoneyAmount {
+  amount: number; // Integer cents (avoid floating point)
+  currency: string; // ISO 4217
+  formatted: string; // "$12.99" — server-formatted for locale
+}
+
+interface TaxLineItem {
+  jurisdiction: string;
+  rate: number; // 0.0825 for 8.25%
+  amount: MoneyAmount;
+  type: "sales_tax" | "vat" | "gst";
+}
+
+interface DiscountLineItem {
+  code: string;
+  type: "percentage" | "fixed_amount" | "free_shipping";
+  value: number;
+  appliedAmount: MoneyAmount;
+}
+
+interface CartItem {
+  id: string;
+  productId: string;
+  variantId: string;
+  title: string;
+  variantTitle: string;
+  imageUrl: string;
+  quantity: number;
+  unitPrice: MoneyAmount;
+  lineTotal: MoneyAmount;
+  inventoryStatus: "available" | "low_stock" | "reserved" | "unavailable";
+  maxQuantity: number;
+}
+
+interface FraudSignals {
+  deviceFingerprint: string; // Fingerprint.js visitorId
+  sessionDurationMs: number;
+  pagesVisitedBeforeCheckout: number;
+  previousPurchaseCount: number;
+  ipGeolocation: string | null; // Country code from server
+  browserTimezone: string;
+  screenResolution: string;
+  touchCapable: boolean;
+  cookiesEnabled: boolean;
+  webdriverDetected: boolean;
+}
+
+// Client-side UI state (Zustand store)
+interface CheckoutUIState {
+  currentStep: CheckoutStatus;
+  stepValidation: Record<CheckoutStatus, boolean>;
+  isSubmitting: boolean;
+  submitError: CheckoutError | null;
+  hostedFieldsReady: boolean;
+  hostedFieldErrors: Record<string, string>;
+  threeDSChallengeUrl: string | null;
+  reservationTimeRemaining: number | null; // seconds
+  paymentMethodsAvailable: PaymentMethodType[];
+}
+
+interface CheckoutError {
+  code: string;
+  message: string;
+  field: string | null;
+  recoverable: boolean;
+  suggestedAction:
+    | "retry"
+    | "change_method"
+    | "contact_support"
+    | "update_card";
+}
+```
+
+---
+
+## Interface Definition (API)
+
+### Checkout Session Management
+
+```typescript
+// POST /api/checkout/sessions
+// Creates a new checkout session from cart
+interface CreateCheckoutRequest {
+  cartId: string;
+  email?: string;
+  returnUrl: string; // For 3DS redirect return
+}
+
+interface CreateCheckoutResponse {
+  sessionId: string;
+  clientSecret: string; // For Stripe.js initialization
+  expiresAt: string;
+  reservationExpiresAt: string;
+}
+
+// PATCH /api/checkout/sessions/:sessionId
+// Updates session (address, shipping, etc.)
+interface UpdateCheckoutRequest {
+  email?: string;
+  shippingAddress?: Address;
+  billingAddress?: Address;
+  shippingMethodId?: string;
+  discountCode?: string;
+}
+
+interface UpdateCheckoutResponse {
+  session: CheckoutSession;
+  pricing: PriceCalculation; // Recalculated after each update
+  availableShippingMethods?: ShippingMethod[];
+  validationErrors?: ValidationError[];
+}
+```
+
+### Payment Confirmation
+
+```typescript
+// POST /api/checkout/sessions/:sessionId/confirm
+// Idempotent order placement
+interface ConfirmCheckoutRequest {
+  paymentMethodType: PaymentMethodType;
+  paymentToken?: string; // From hosted fields tokenization
+  idempotencyKey: string; // Client-generated UUID, stored in session
+  returnUrl: string; // 3DS redirect return URL
+  fraudSignals: FraudSignals;
+}
+
+interface ConfirmCheckoutResponse {
+  status: "completed" | "requires_action" | "failed";
+  orderId?: string;
+  redirectUrl?: string; // 3DS challenge URL
+  error?: CheckoutError;
+}
+
+// GET /api/checkout/sessions/:sessionId/status
+// Poll after 3DS redirect return
+interface CheckoutStatusResponse {
+  status: CheckoutStatus;
+  orderId?: string;
+  error?: CheckoutError;
+}
+```
+
+### Price Calculation
+
+```typescript
+// POST /api/checkout/calculate-price
+// Called on address/shipping/discount change
+interface CalculatePriceRequest {
+  cartId: string;
+  shippingAddress?: Address;
+  shippingMethodId?: string;
+  discountCodes: string[];
+}
+
+interface CalculatePriceResponse {
+  pricing: PriceCalculation;
+  warnings?: PriceWarning[]; // "Item X price changed since added to cart"
+}
+
+interface PriceWarning {
+  type: "price_changed" | "item_unavailable" | "discount_expired";
+  itemId?: string;
+  message: string;
+}
+```
+
+### Address Validation
+
+```typescript
+// POST /api/checkout/validate-address
+interface ValidateAddressRequest {
+  address: Address;
+}
+
+interface ValidateAddressResponse {
+  valid: boolean;
+  suggestedAddress?: Address; // Standardized version
+  corrections?: AddressCorrection[];
+}
+
+interface AddressCorrection {
+  field: keyof Address;
+  original: string;
+  suggested: string;
+}
+```
+
+### Idempotency Strategy
+
+Every `confirm` request includes a client-generated `idempotencyKey` (UUIDv4). The server:
+
+1. Checks if this key has been seen before → returns cached response
+2. If new, processes payment and stores result keyed by idempotency key (TTL: 24h)
+3. If in-flight (another request with same key is processing), returns 409 Conflict
+
+The client generates the key once when entering the review step and stores it in the Zustand store + localStorage. It never regenerates unless the user explicitly restarts checkout.
+
+---
+
+## Caching Strategy
+
+### Client-Side Caching
+
+**React Query cache (in-memory):**
+
+- Checkout session: `staleTime: 0` (always refetch on focus), `cacheTime: 5min`
+- Price calculation: cached by `hash(cartItems + address + shipping + discounts)`, `staleTime: 30s`
+- Shipping methods: cached by `hash(address + cartWeight)`, `staleTime: 5min`
+- Address autocomplete suggestions: cached by query prefix, `staleTime: 60s`, max 50 entries (LRU)
+
+**localStorage persistence:**
+
+- Form field values (encrypted with session key): TTL 30 minutes
+- Selected payment method type: TTL 30 minutes
+- Idempotency key: TTL 24 hours (must survive across retries)
+- Guest email: TTL 7 days (for returning guest identification)
+
+**Service Worker:**
+
+- Checkout JS bundle: cache-first (versioned filename)
+- Stripe.js / payment SDKs: stale-while-revalidate (60s)
+- Google Places API: not cacheable (session tokens)
+- Static assets (icons, fonts): cache-first, 30-day TTL
+
+### CDN & Edge Caching
+
+| Resource                     | Cache-Control                                        | Rationale                           |
+| ---------------------------- | ---------------------------------------------------- | ----------------------------------- |
+| Checkout HTML shell          | `private, no-store`                                  | Session-specific; never cache       |
+| JS bundles                   | `public, max-age=31536000, immutable`                | Content-hashed filenames            |
+| Payment method icons         | `public, max-age=86400, stale-while-revalidate=3600` | Rarely change                       |
+| API responses                | `private, no-store`                                  | All checkout APIs are user-specific |
+| Cart summary (authenticated) | `private, no-cache`                                  | Varies per user; must revalidate    |
+
+### Cache Coherence
+
+- **Cross-tab sync:** `BroadcastChannel('checkout')` propagates cart modifications and step completions across tabs. If another tab completes checkout, all other tabs redirect to confirmation.
+- **3DS redirect recovery:** On return from 3DS, the app reads `payment_intent` from URL params, queries server for session status, and reconciles local Zustand state with server truth.
+- **Price staleness:** If the calculated price is > 60s old when "Place Order" is clicked, a fresh calculation is triggered. If the total changed, the user is shown a diff before confirming.
+- **Inventory reservation refresh:** A 30-second polling interval checks reservation status. At T-2min, a warning toast appears. At T-0, the UI blocks submission and prompts re-reservation.
+
+---
+
+## Rendering & Performance Deep Dive
+
+### Critical Rendering Path
+
+**Tier 1 (0-500ms):** Checkout shell + progress bar + cart summary skeleton. Delivered as a single cached JS chunk (< 50KB gzipped). No API calls block this render.
+
+**Tier 2 (500ms-1.5s):** Current step form fields render. Cart summary populates from React Query cache (instant on back-navigation) or API fetch. Shipping methods load if address is known.
+
+**Tier 3 (1s-2.5s):** Hosted payment field iframes initialize (Stripe.js loads async, mounts iframes). Apple Pay / Google Pay `canMakePayment()` resolves. Address autocomplete SDK initializes.
+
+**Tier 4 (interaction-triggered):** Tax calculation (on address completion), 3DS challenge modal, PayPal SDK (on PayPal selection), BNPL widgets (on BNPL selection).
+
+```
+Timeline (4G mid-range device):
+────────────────────────────────────────────────────────────────
+0ms       HTML + critical CSS arrive
+100ms     Shell renders (progress bar, layout)
+300ms     Main JS chunk executes, Zustand hydrates from localStorage
+500ms     Cart summary renders (from cache or API)
+800ms     Form fields render, autofocus on first empty field
+1200ms    Stripe.js loaded, iframe mounting begins
+1800ms    Hosted fields ready (interactive card input)
+2200ms    Address autocomplete SDK ready
+2500ms    Full TTI — all interactions functional
+────────────────────────────────────────────────────────────────
+```
+
+### Core Web Vitals Targets
+
+| Metric | Target  | Strategy                                                                    |
+| ------ | ------- | --------------------------------------------------------------------------- |
+| LCP    | < 1.8s  | Cart summary is LCP element; render from cache immediately                  |
+| INP    | < 150ms | No sync validation on keystroke; debounce 300ms for server calls            |
+| CLS    | 0       | Reserve exact iframe heights (44px); skeleton placeholders match final size |
+| FCP    | < 800ms | Inline critical CSS; preload checkout font                                  |
+| TTFB   | < 200ms | Edge-routed to nearest POP; no SSR computation                              |
+
+### Bundle Optimization
+
+```
+Checkout bundle breakdown:
+─────────────────────────────────
+Core checkout logic:         28KB gzipped
+React + React DOM:           42KB (shared across app)
+Zustand + React Query:        8KB
+Form validation (Zod):        6KB
+─────────────────────────────────
+Total blocking:              84KB
+
+Lazy-loaded (per payment method):
+Stripe.js (external):       35KB (loaded from js.stripe.com)
+PayPal SDK (external):       45KB (loaded on PayPal selection)
+Klarna Widget:               22KB (loaded on BNPL selection)
+Google Places:               18KB (loaded on address focus)
+─────────────────────────────────
+```
+
+Payment SDKs are loaded via `<script>` tags inserted dynamically when the user selects that payment method (except Stripe.js which preloads on checkout entry since card is the default).
+
+<Callout>
+  **Performance budget enforcement:** CI blocks deployment if the checkout
+  critical-path bundle exceeds 100KB gzipped. Payment method SDKs are external
+  scripts loaded from processor CDNs and don't count against this budget — but
+  their load time is measured via Resource Timing API and alerted if p75 exceeds
+  2s.
+</Callout>
+
+---
+
+## Security Deep Dive
+
+### Threat Model
+
+| Threat                       | Attack Vector                                                     | Impact                                  | Mitigation                                                                                                         |
+| ---------------------------- | ----------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Card skimming (Magecart)     | Compromised third-party script reads card input                   | Full PAN theft at scale                 | Hosted fields in cross-origin iframes; CSP blocks inline scripts; Subresource Integrity on all third-party scripts |
+| Idempotency key manipulation | Attacker replays confirm request with modified amount             | Undercharging or order duplication      | Idempotency key bound to session + amount hash server-side; key is never exposed in client-accessible storage      |
+| Price manipulation           | Client modifies total before submission                           | Paying less than owed                   | Server recalculates price on confirm; client total is display-only; any mismatch aborts                            |
+| Inventory hold exhaustion    | Bot creates thousands of checkout sessions                        | Legitimate buyers can't purchase        | Rate limit session creation (5/min per IP); CAPTCHA after 3 sessions; short TTL (10min) on reservations            |
+| 3DS redirect phishing        | Attacker substitutes 3DS redirect URL                             | Credentials harvested on fake bank page | Only accept redirect URLs matching processor's known domains; validate `redirect_status` cryptographically         |
+| Session fixation             | Attacker sets checkout session cookie before victim authenticates | Hijack completed checkout               | Regenerate session ID on every authentication state change; bind session to device fingerprint                     |
+
+### PCI Scope Reduction
+
+The architecture achieves **SAQ-A** (lowest PCI burden) through strict isolation:
+
+```
+┌─────────────────────────────────────────────────┐
+│              YOUR DOMAIN (merchant.com)           │
+│                                                   │
+│   ┌─────────────────────────────────────────┐    │
+│   │  Checkout Application                    │    │
+│   │  - Renders form layout                   │    │
+│   │  - Manages non-sensitive state           │    │
+│   │  - CANNOT read iframe content            │    │
+│   │                                          │    │
+│   │  ┌────────────────────────────────────┐  │    │
+│   │  │ iframe src="js.stripe.com/v3/..."  │  │    │
+│   │  │ ┌──────────────────────────────┐   │  │    │
+│   │  │ │  Card Number: 4242...        │   │  │    │
+│   │  │ │  (Rendered by Stripe JS)     │   │  │    │
+│   │  │ └──────────────────────────────┘   │  │    │
+│   │  │                                    │  │    │
+│   │  │ Communication: postMessage only    │  │    │
+│   │  │ Events: focus, blur, error, ready  │  │    │
+│   │  │ No card data crosses this boundary │  │    │
+│   │  └────────────────────────────────────┘  │    │
+│   └─────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────┘
+```
+
+Rules enforced:
+
+- `sandbox` attribute on payment iframes allows only `allow-scripts allow-same-origin`
+- Parent frame has no `contentDocument` access (cross-origin)
+- Network tab shows tokenization request goes to `api.stripe.com`, never to merchant server
+- JavaScript `MutationObserver` monitors for injected iframes (Magecart detection)
+
+### Tokenization
+
+The tokenization flow ensures raw card data never enters merchant scope:
+
+1. User types card number into Stripe-hosted iframe
+2. Stripe.js (running inside iframe) validates card format client-side
+3. On form submit, parent calls `stripe.confirmCardPayment(clientSecret)`
+4. Stripe.js sends card data directly to `api.stripe.com` (not merchant API)
+5. Stripe returns a `PaymentIntent` status to the parent frame via `postMessage`
+6. Merchant frontend sends only the `paymentIntentId` to merchant backend
+7. Merchant backend calls Stripe API with the intent ID to confirm/capture
+
+At no point does merchant JavaScript have access to `4242 4242 4242 4242`.
+
+### 3DS / SCA Flows
+
+Strong Customer Authentication (required for EU transactions > €30) introduces three flow patterns:
+
+**Flow 1: Frictionless (no challenge)**
+
+```
+confirmCardPayment() → status: "succeeded" → show confirmation
+```
+
+**Flow 2: Inline challenge (modal)**
+
+```
+confirmCardPayment() → status: "requires_action"
+  → stripe.handleNextAction() renders 3DS iframe/modal
+  → User completes challenge in-page
+  → status: "succeeded" → show confirmation
+```
+
+**Flow 3: Redirect challenge (bank page)**
+
+```
+confirmCardPayment({ return_url }) → status: "requires_action"
+  → Browser redirects to bank's 3DS page
+  → User authenticates with bank
+  → Bank redirects to return_url?payment_intent=pi_xxx&redirect_status=succeeded
+  → App reads URL params, polls /api/checkout/sessions/:id/status
+  → status: "completed" → show confirmation
+```
+
+<Callout>
+  **Redirect recovery is the hardest UX problem in checkout.** When the user
+  returns from a 3DS redirect, the entire SPA state is lost. Recovery requires:
+  (1) server-side session with all checkout data, (2) URL params identifying the
+  payment intent, (3) a loading state that queries server before rendering any
+  step. Never rely on localStorage alone — users may return on a different tab
+  or after clearing storage.
+</Callout>
+
+State machine for 3DS:
+
+```typescript
+type ThreeDSState =
+  | { status: "idle" }
+  | { status: "challenge_presented"; challengeUrl: string }
+  | { status: "challenge_completed"; paymentIntentId: string }
+  | { status: "redirect_initiated"; returnUrl: string }
+  | {
+      status: "redirect_returned";
+      paymentIntentId: string;
+      redirectStatus: string;
+    }
+  | { status: "failed"; error: CheckoutError };
+```
+
+---
+
+## Scalability & Reliability
+
+### Scalability Patterns
+
+**Payment method lazy loading:** Only the card form renders by default. PayPal SDK, Klarna widget, and other payment methods load their respective SDKs on-demand when selected. This reduces initial load by 60-80KB.
+
+**Address autocomplete session tokens:** Google Places API charges per-session, not per-keystroke. A session token groups all autocomplete requests + the final place details request into one billing event. Token is generated on field focus and expires on selection or blur.
+
+**Checkout session sharding:** Server-side checkout sessions are distributed across Redis cluster nodes by session ID hash. No single node holds more than 10% of active checkouts. Session data is < 12KB, fitting comfortably in Redis memory.
+
+**Horizontal scaling of payment confirmations:** Payment confirm endpoints are stateless (all state in Redis session + payment processor). Any API instance can handle any confirm request. Load balancer distributes by least-connections.
+
+### Failure Handling
+
+| Failure Mode                        | Detection                                                           | User Experience                                                                         | Recovery                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Network loss during payment         | `navigator.onLine` + fetch timeout (15s)                            | "Connection lost. Your payment was not submitted. We'll retry when you're back online." | Queue confirm request; retry on `online` event with same idempotency key                          |
+| Payment declined                    | API returns `status: 'failed'`, `error.code: 'card_declined'`       | "Your card was declined. Please try a different payment method."                        | Highlight payment step; preserve all other data; offer alternatives                               |
+| 3DS timeout (user doesn't complete) | Redirect return with `redirect_status=failed` OR 5-min client timer | "Authentication timed out. Please try again."                                           | Reset to payment step; generate new payment intent; preserve session                              |
+| Inventory expired during checkout   | Polling returns `reservation_status: 'expired'`                     | "Some items are no longer reserved. Checking availability..."                           | Auto-attempt re-reservation; if unavailable, show which items lost stock                          |
+| Tax calculation failure             | API 5xx or timeout (2s)                                             | "Unable to calculate tax. You can continue — final amount confirmed before charge."     | Show estimated tax with disclaimer; block final confirm until tax resolves                        |
+| Stripe.js load failure              | iframe `onerror` or 10s timeout                                     | "Payment form failed to load. Please refresh or try a different browser."               | Retry Stripe.js load 3x with exponential backoff; fallback to PayPal-only                         |
+| Double-click on Place Order         | Idempotency key match on server                                     | No duplicate charge; same response returned                                             | Button disabled after first click; show spinner; idempotency key prevents server-side duplication |
+
+### Resilience Patterns
+
+**Idempotent submission circuit:**
+
+```typescript
+async function handlePlaceOrder(): Promise<void> {
+  if (store.getState().isSubmitting) return; // Guard against race conditions
+
+  store.setState({ isSubmitting: true, submitError: null });
+
+  const idempotencyKey = store.getState().idempotencyKey; // Generated once on review step entry
+
+  try {
+    const result = await confirmCheckout({
+      idempotencyKey,
+      paymentMethodType: store.getState().paymentMethodType,
+      paymentToken: store.getState().paymentToken,
+      returnUrl: `${window.location.origin}/checkout/payment?session=${sessionId}`,
+      fraudSignals: collectFraudSignals(),
+    });
+
+    if (result.status === "completed") {
+      router.push(`/checkout/confirmation/${result.orderId}`);
+    } else if (result.status === "requires_action") {
+      store.setState({ threeDSChallengeUrl: result.redirectUrl });
+    } else {
+      store.setState({ submitError: result.error, isSubmitting: false });
+    }
+  } catch (error) {
+    store.setState({
+      submitError: {
+        code: "network_error",
+        message: "Connection failed. Your card was not charged.",
+        recoverable: true,
+        suggestedAction: "retry",
+        field: null,
+      },
+      isSubmitting: false,
+    });
+  }
+}
+```
+
+**Graceful degradation matrix:**
+
+| Capability Lost                | Fallback                                                               |
+| ------------------------------ | ---------------------------------------------------------------------- |
+| JavaScript disabled            | Server-rendered fallback form (reduced functionality)                  |
+| Stripe.js blocked (ad blocker) | Detect via timeout; show manual card form warning + PayPal alternative |
+| Apple Pay unavailable          | `canMakePayment()` returns false; hide button; show card form          |
+| Google Places API down         | Disable autocomplete; show manual address fields; validate server-side |
+| WebSocket unavailable          | Fall back to 30s polling for inventory/reservation status              |
+
+---
+
+## Accessibility Deep Dive
+
+### Form Navigation and Structure
+
+```html
+<main role="main" aria-label="Checkout">
+  <nav aria-label="Checkout progress">
+    <ol role="list">
+      <li aria-current="step">Shipping</li>
+      <li>Payment</li>
+      <li>Review</li>
+    </ol>
+  </nav>
+
+  <form aria-labelledby="step-heading">
+    <h1 id="step-heading">Shipping Address</h1>
+    <!-- Step content -->
+  </form>
+</main>
+```
+
+### Keyboard Navigation
+
+| Context                       | Key                        | Action                                                  |
+| ----------------------------- | -------------------------- | ------------------------------------------------------- |
+| Address autocomplete dropdown | `↓` / `↑`                  | Navigate suggestions                                    |
+| Address autocomplete dropdown | `Enter`                    | Select highlighted suggestion                           |
+| Address autocomplete dropdown | `Escape`                   | Close dropdown, return focus to input                   |
+| Payment method radio group    | `↓` / `↑`                  | Move selection between methods                          |
+| Shipping method radio group   | `↓` / `↑`                  | Move selection between options                          |
+| Step navigation               | `Enter` on Continue button | Validate and advance                                    |
+| Place Order button            | `Enter` or `Space`         | Submit (with aria-disabled state during processing)     |
+| 3DS challenge modal           | `Tab`                      | Trapped within modal; cycles through challenge controls |
+
+### Screen Reader Announcements
+
+```typescript
+// Announce price changes
+<div aria-live="polite" aria-atomic="true" className="sr-only">
+  {`Order total updated to ${pricing.total.formatted}`}
+</div>
+
+// Announce validation errors
+<div aria-live="assertive" role="alert" className="sr-only">
+  {validationError && `Error: ${validationError.message}`}
+</div>
+
+// Announce step transitions
+<div aria-live="polite" className="sr-only">
+  {`Step ${currentStepNumber} of 4: ${currentStepName}`}
+</div>
+
+// Announce payment processing
+<div aria-live="assertive" className="sr-only">
+  {isSubmitting && "Processing your payment. Please wait."}
+</div>
+```
+
+### Hosted Fields Accessibility
+
+Stripe Elements and similar hosted field implementations present unique accessibility challenges because iframes break the natural tab order:
+
+- Hosted fields must be wrapped in `<fieldset>` with `<legend>` identifying the group as "Card payment details"
+- Tab order: Card Number → Expiry → CVC follows natural iframe order (managed by Stripe.js)
+- Error messages from hosted fields arrive via `postMessage` and must be rendered in the parent DOM with `aria-describedby` linked to the corresponding label
+- Focus indicators on hosted fields are styled by the payment processor — ensure they meet 3:1 contrast ratio by passing custom styles to the Stripe Elements configuration
+
+<Callout>
+  **Common accessibility trap:** Many checkout implementations hide the "Place
+  Order" button until all fields are valid, which leaves keyboard users confused
+  about how to proceed. Instead, keep the button always visible with
+  `aria-disabled="true"` when invalid, and announce what's missing via
+  `aria-describedby` pointing to an error summary.
+</Callout>
+
+### Touch Targets and Mobile
+
+- All form inputs: minimum 44×44px touch target
+- Payment method selection buttons: 48×48px minimum
+- "Continue" / "Place Order" buttons: full-width on mobile (min-height: 48px)
+- Spacing between radio options: 12px minimum (prevents mis-taps)
+- Apple Pay / Google Pay buttons follow platform HIG sizing (minimum 40px height)
+
+---
+
+## Monitoring & Observability
+
+### Client-Side Metrics
+
+| Metric                                 | Collection Method                               | Alert Threshold                |
+| -------------------------------------- | ----------------------------------------------- | ------------------------------ |
+| Checkout funnel drop-off per step      | Custom event on step entry/exit                 | > 20% drop at any single step  |
+| Payment form TTI (hosted fields ready) | `performance.mark()` on Stripe `ready` event    | p75 > 3s                       |
+| Place Order → confirmation latency     | Custom timing from click to route change        | p75 > 5s (excluding 3DS)       |
+| 3DS challenge completion rate          | Ratio of `requires_action` to final `succeeded` | < 80%                          |
+| Cart abandonment at checkout           | Session without `completed` status after 30min  | Rate > 65%                     |
+| Payment decline rate                   | `failed` status count / total confirms          | > 8% (investigate fraud rules) |
+| Idempotency key collision rate         | Server-side dedup hit count                     | > 0.1% (indicates retry storm) |
+| Hosted field error rate                | `postMessage` error events from Stripe          | > 2% of sessions               |
+
+### Error Tracking
+
+```typescript
+// Structured error reporting
+function reportCheckoutError(
+  error: CheckoutError,
+  context: ErrorContext,
+): void {
+  errorTracker.capture({
+    error,
+    tags: {
+      checkout_step: context.step,
+      payment_method: context.paymentMethod,
+      is_retry: context.isRetry,
+      session_id: context.sessionId, // For correlation
+    },
+    extra: {
+      cart_item_count: context.cartItemCount,
+      cart_total: context.cartTotal,
+      time_in_checkout: context.timeInCheckoutMs,
+      device_type: context.deviceType,
+    },
+  });
+}
+```
+
+Error categories and handling:
+
+- **Payment processor errors** (decline, fraud, 3DS failure): tracked with processor error code for pattern analysis
+- **Validation errors** (invalid address, expired card): tracked by field to identify UX friction
+- **Infrastructure errors** (timeout, 5xx, Stripe.js load failure): P1 alert if rate > 0.5%
+- **Client errors** (JS exception in checkout): source-mapped, grouped by stack trace
+
+### Day-1 Launch Dashboard
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  CHECKOUT HEALTH DASHBOARD                                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  [1] Conversion Funnel          [2] Payment Success Rate     │
+│  Cart → Info → Ship → Pay →     ████████████░░ 94.2%        │
+│  Review → Confirm               Declined: 4.1%              │
+│  ███ → ██ → ██ → █ → █ → █     3DS Failed: 1.7%            │
+│  100%  82%  78%  74%  71% 68%                               │
+│                                                              │
+│  [3] Latency (p75)             [4] Error Rate               │
+│  Checkout load: 1.8s           Client JS: 0.02%             │
+│  Payment form ready: 1.4s      API 5xx: 0.01%               │
+│  Confirm → complete: 2.1s     Stripe errors: 0.3%           │
+│                                                              │
+│  [5] Revenue at Risk            [6] Active Checkouts         │
+│  Abandoned (last 1h): $4,200    In progress: 342            │
+│  Failed payments: $890          Awaiting 3DS: 28             │
+│  Expired reservations: $320     Reservation expiring: 12     │
+│                                                              │
+│  [7] Payment Method Mix         [8] Device Split             │
+│  Card: 62%  Apple Pay: 18%      Mobile: 58%                 │
+│  PayPal: 12%  BNPL: 5%         Desktop: 37%                │
+│  Other: 3%                      Tablet: 5%                   │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Alerting Rules
+
+| Alert                       | Condition                                        | Severity | Action                                             |
+| --------------------------- | ------------------------------------------------ | -------- | -------------------------------------------------- |
+| Payment success rate drop   | < 90% over 5-min window                          | P1       | Page on-call; check PSP status page                |
+| Checkout error spike        | > 1% of sessions hitting JS error                | P2       | Investigate deployment; potential rollback         |
+| Hosted fields load failure  | > 5% of page loads timeout                       | P1       | Check Stripe status; enable PayPal-only fallback   |
+| Reservation expiry spike    | > 30% of reservations expiring (vs baseline 10%) | P2       | Investigate slow checkouts; consider extending TTL |
+| Idempotency collision spike | > 1% of confirms are deduped                     | P2       | Investigate network instability causing retries    |
+
+---
+
+## Trade-offs
+
+| Decision                   | Option A                        | Option B                                       | Chosen                                     | Rationale                                                                                              |
+| -------------------------- | ------------------------------- | ---------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Card input                 | Hosted fields (iframes)         | Full redirect to hosted page (Stripe Checkout) | Hosted fields                              | Maximum UX control + branding while maintaining SAQ-A. Redirect loses customization and breaks flow    |
+| Step navigation            | Single-page wizard (URL steps)  | Accordion (all steps visible)                  | URL steps                                  | Deep-linkable; supports 3DS redirect return; clearer progress; less cognitive overload                 |
+| State persistence          | Server session only             | localStorage only                              | Server session + localStorage fallback     | Server survives 3DS redirects and device switches; localStorage provides instant hydration             |
+| Price calculation          | Client-side calculation         | Server-side on every change                    | Server-side                                | Eliminates price manipulation; handles tax/discount complexity; single source of truth                 |
+| Idempotency key generation | Server-generated                | Client-generated (stored in session)           | Client-generated                           | Available immediately for offline retry; server validates against session to prevent tampering         |
+| Payment method SDK loading | Preload all                     | Lazy-load on selection                         | Lazy-load                                  | 60-80KB savings on initial load; card (default) preloaded; others load in < 500ms on fast connections  |
+| Inventory reservation      | Optimistic (reserve on confirm) | Pessimistic (reserve on checkout entry)        | Pessimistic with TTL                       | Prevents overselling during flash sales; 10-min TTL balances hold cost vs conversion                   |
+| 3DS challenge rendering    | Inline modal (iframe)           | Full redirect                                  | Inline with redirect fallback              | Better UX (no context switch); some banks require redirect; support both                               |
+| Guest checkout             | Require account                 | Allow guest with email only                    | Guest with email                           | 35% of users abandon when forced to create account (Baymard Institute); email enables recovery         |
+| Form validation            | Real-time (on blur)             | On submit only                                 | Hybrid: blur for format, submit for server | Immediate feedback for typos; avoids premature errors while typing; server validates address/inventory |
+
+<Callout>
+  **The hosted fields trade-off is the defining architectural decision.** Full
+  redirect (Stripe Checkout hosted page) eliminates PCI scope entirely but
+  sacrifices all UX customization — you can't match your brand's checkout
+  experience. Hosted fields (Stripe Elements) give you pixel-perfect control of
+  everything except the card input itself. The cost: you must manage iframe
+  communication, handle postMessage events, and deal with cross-origin focus
+  management. For any business where checkout conversion directly impacts
+  revenue (i.e., all of them), hosted fields are worth the complexity.
+</Callout>
+
+---
+
+## What Great Looks Like
+
+### Senior Engineer (5-8 YOE)
+
+- Implements multi-step form with proper validation and URL-synced navigation
+- Integrates Stripe Elements correctly with proper error handling
+- Implements idempotency on the confirm endpoint
+- Handles common failure states (declined card, network timeout)
+- Achieves WCAG AA compliance on form interactions
+- Implements proper loading and skeleton states
+- Understands why card data must not touch merchant DOM
+- Tests happy path + 2-3 error scenarios
+
+### Staff Engineer (8-12 YOE)
+
+- Designs the full state machine covering all checkout states including 3DS flows
+- Architects the payment method plugin system (add new methods without modifying core)
+- Implements comprehensive fraud signal collection with privacy considerations
+- Designs the inventory reservation system with TTL and graceful degradation
+- Builds the price calculation pipeline with caching and staleness detection
+- Implements cross-tab synchronization for checkout state
+- Designs the monitoring dashboard with business-relevant metrics
+- Handles edge cases: currency conversion, partial availability, split payments
+- Makes explicit trade-offs between conversion optimization and security
+
+### Principal Engineer (12+ YOE)
+
+- Designs the architecture to support multi-PSP failover (Stripe → Adyen fallback)
+- Architects checkout as a platform supporting multiple storefronts/brands
+- Designs the A/B testing framework for checkout experiments (1-step vs multi-step, field ordering, payment method ordering)
+- Implements sophisticated device fingerprinting that balances fraud detection with privacy regulation (GDPR consent for fingerprinting)
+- Designs the checkout session architecture for global deployment (data residency for EU card data, edge session routing)
+- Creates the vendor abstraction layer that normalizes Stripe/Adyen/Square/PayPal into a unified interface
+- Designs the degradation cascade: JS failure → server-rendered form → mobile deep link to native checkout
+- Establishes checkout reliability SLOs and error budgets with automatic rollback triggers
+- Architects the real-time analytics pipeline for conversion optimization (identifies exact friction point per cohort)
+
+---
+
+## Key Takeaways
+
+- **PCI compliance is an architecture constraint, not an afterthought.** Hosted fields in cross-origin iframes are the only pattern that gives you UX control while maintaining SAQ-A. This decision shapes your entire component tree and event handling model.
+
+- **Idempotency is the single most critical safety mechanism.** A client-generated UUID, bound server-side to session + amount, prevents double-charges regardless of network failures, retries, or user impatience. Generate once, never regenerate until explicit restart.
+
+- **3DS redirect recovery requires server-side session truth.** SPA state is destroyed on redirect. The only reliable recovery path is: URL params identify the payment intent → server query returns full session → client rebuilds from server state. LocalStorage is a performance optimization, not a source of truth.
+
+- **Lazy-load payment method SDKs aggressively.** Only card input (the 62% case) preloads its SDK. PayPal (45KB), Klarna (22KB), and other methods load on selection. This keeps checkout TTI under budget while supporting 8+ payment types.
+
+- **Inventory reservation with TTL prevents overselling without blocking conversion.** A 10-minute hold strikes the balance: long enough for 95% of checkouts to complete, short enough to release stock for legitimate buyers. Surface the countdown to create urgency without anxiety.
+
+- **Monitor checkout as a revenue pipeline, not a technical endpoint.** Dashboard panels should show dollars-at-risk (abandoned carts × average value), not just error rates. Alert on conversion drop, not just 5xx responses. A 2% decline rate increase at $50 AOV during Black Friday costs $100K/hour.
+
+- **The fastest checkout is the one with fewest fields.** Every additional form field reduces conversion by 2-4% (Baymard Institute). Guest checkout, autofill support, address autocomplete, saved payment methods, and Apple Pay (zero fields) are not UX polish — they are revenue-generating architecture decisions.
+
+<Callout>
+  **Implementation priority for day-1 launch:** (1) Hosted fields + idempotent
+  confirm — these are safety-critical. (2) Multi-step form with URL persistence
+  — enables 3DS recovery. (3) Server-side price calculation — prevents
+  manipulation. (4) Basic error handling for declines/timeouts. (5) Apple Pay /
+  Google Pay — highest-ROI payment method addition (one-tap purchase).
+  Everything else (BNPL, address autocomplete, fraud signals) can ship in week
+  2-3.
+</Callout>

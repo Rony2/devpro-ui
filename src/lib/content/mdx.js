@@ -1,5 +1,7 @@
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
+import GithubSlugger from "github-slugger";
 
 export async function compileMdx(source, components = {}) {
   const { content } = await compileMDX({
@@ -8,7 +10,7 @@ export async function compileMdx(source, components = {}) {
       parseFrontmatter: false,
       mdxOptions: {
         remarkPlugins: [remarkGfm],
-        rehypePlugins: [],
+        rehypePlugins: [rehypeSlug],
       },
     },
     components,
@@ -18,12 +20,13 @@ export async function compileMdx(source, components = {}) {
 }
 
 export function extractHeadings(source) {
+  const slugger = new GithubSlugger();
   const lines = source.split("\n");
   return lines
     .filter((line) => line.startsWith("## "))
     .map((line) => {
       const text = line.replace(/^##\s+/, "").trim();
-      const id = text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+      const id = slugger.slug(text);
       return { id, text };
     });
 }
